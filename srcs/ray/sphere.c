@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 17:39:06 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/11 17:47:52 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/11 18:40:15 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,3 @@ int	hit_sphere(t_point center, double r, t_ray ray)
 	else
 		return (1);
 }
-

@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:24:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/11 17:48:54 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/11 18:35:49 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ typedef struct s_minirt
 	t_data		*img;
 	int			img_width;
 	int			img_height;
-	int			viewpoint_width;
-	int			viewpoint_height;
-	int			focal_length;
+	double		viewpoint_width;
+	double		viewpoint_height;
+	double		focal_length;
 }				t_minirt;
 
 //functions

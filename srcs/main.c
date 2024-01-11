@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:25:06 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/11 18:27:27 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/11 18:37:36 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 void	minirt_init_screen(t_minirt *minirt)
 {
-	int	aspect_ratio;
+	double	aspect_ratio;
 
-	aspect_ratio = 16 / 9;
+	aspect_ratio = 16.0 / 9.0;
 	minirt->img_width = 800;
-	minirt->img_height = (int)minirt->img_width / aspect_ratio;
-	minirt->viewpoint_height = 2;
+	minirt->img_height = (int)(minirt->img_width / aspect_ratio);
+	minirt->viewpoint_height = 2.0;
 	minirt->viewpoint_width = minirt->viewpoint_height * aspect_ratio;
-	minirt->focal_length = 1;
+	minirt->focal_length = 1.0;
 }
 
 t_minirt	*minirt_init(void)
