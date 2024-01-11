@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:33:52 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/12 02:06:31 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/12 05:20:25 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,27 @@ void	set_pixel(t_minirt *minirt, int x, int y, unsigned int color)
 	}
 }
 
-t_vec	lower_left_corner(t_minirt *minirt, t_ray *ray)
+void	anti_aliasing(t_minirt *minirt, int x, int y, t_color *pixel_color)
 {
-	t_point	lower_left_corner;
+	int		i;
+	t_ray	tmp;
 
-	lower_left_corner = vec_sub(ray->origin, \
-	vec((double)minirt->viewpoint_width \
-	/ 2, (double)minirt->viewpoint_height / 2, minirt->focal_length));
-	return (lower_left_corner);
+	i = 0;
+	while (i < minirt->camera.samples_per_pixel)
+	{
+		tmp = get_ray(minirt->camera, \
+		((x + random_double()) / (minirt->img_width - 1)), \
+		((y + random_double()) / (minirt->img_height - 1)));
+		*pixel_color = vec_add(*pixel_color, ray_color(&tmp, minirt->objects));
+		i++;
+	}
 }
 
 void	print_color(t_minirt *minirt)
 {
 	int				x;
 	int				y;
-	t_ray			tmp;
+	t_color			pixel_color;
 
 	y = 0;
 	while (y < minirt->img_height)
@@ -61,14 +67,10 @@ void	print_color(t_minirt *minirt)
 		x = 0;
 		while (x < minirt->img_width)
 		{
-			tmp = ray(vec(0, 0, 0), vec(0, 0, 0));
-			tmp.direction = vec_add(lower_left_corner(minirt, &tmp), \
-			vec((double)x / (minirt->img_width - 1) * minirt->viewpoint_width, \
-			(double)y / (minirt->img_height - 1) * \
-			minirt->viewpoint_height, 0));
-			tmp.direction = vec_sub(tmp.direction, tmp.origin);
-			set_pixel(minirt, x, y, set_color(\
-			ray_color(&tmp, minirt->objects)));
+			pixel_color = color(0, 0, 0);
+			anti_aliasing(minirt, x, y, &pixel_color);
+			set_pixel(minirt, x, y, set_color(pixel_color, \
+			minirt->camera.samples_per_pixel));
 			x++;
 		}
 		y++;
