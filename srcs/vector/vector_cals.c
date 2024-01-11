@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:42:54 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/11 16:48:44 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/11 19:42:23 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,12 @@ t_vec	vec_unit(t_vec vec)
 	vec.y /= len;
 	vec.z /= len;
 	return (vec);
+}
+
+double	vec_length_squared(t_vec vec)
+{
+	double	len;
+
+	len = vec.x * vec.x + vec.y * vec.y + vec.z * vec.z;
+	return (len);
 }

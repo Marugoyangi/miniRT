@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:33:52 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/11 19:31:38 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/12 02:06:31 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,12 @@ void	set_pixel(t_minirt *minirt, int x, int y, unsigned int color)
 	}
 }
 
-t_vec	lower_left_corner(t_minirt *minirt, t_ray ray)
+t_vec	lower_left_corner(t_minirt *minirt, t_ray *ray)
 {
 	t_point	lower_left_corner;
 
-	lower_left_corner = vec_sub(ray.origin, vec((double)minirt->viewpoint_width \
+	lower_left_corner = vec_sub(ray->origin, \
+	vec((double)minirt->viewpoint_width \
 	/ 2, (double)minirt->viewpoint_height / 2, minirt->focal_length));
 	return (lower_left_corner);
 }
@@ -52,21 +53,22 @@ void	print_color(t_minirt *minirt)
 {
 	int				x;
 	int				y;
-	t_ray			ray;
+	t_ray			tmp;
 
 	y = 0;
-	ray.origin = vec(0, 0, 0);
 	while (y < minirt->img_height)
 	{
 		x = 0;
 		while (x < minirt->img_width)
 		{
-			ray.direction = vec_add(lower_left_corner(minirt, ray), \
+			tmp = ray(vec(0, 0, 0), vec(0, 0, 0));
+			tmp.direction = vec_add(lower_left_corner(minirt, &tmp), \
 			vec((double)x / (minirt->img_width - 1) * minirt->viewpoint_width, \
 			(double)y / (minirt->img_height - 1) * \
 			minirt->viewpoint_height, 0));
-			ray.direction = vec_sub(ray.direction, ray.origin);
-			set_pixel(minirt, x, y, set_color(ray_color(ray)));
+			tmp.direction = vec_sub(tmp.direction, tmp.origin);
+			set_pixel(minirt, x, y, set_color(\
+			ray_color(&tmp, minirt->objects)));
 			x++;
 		}
 		y++;

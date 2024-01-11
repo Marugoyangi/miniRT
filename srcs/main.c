@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:25:06 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/11 18:37:36 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/12 02:49:32 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ t_minirt	*minirt_init(void)
 {
 	t_minirt	*minirt;
 
-	minirt = malloc(sizeof(t_minirt));
-	if (!minirt)
-		ft_close(NULL, "Error: minirt initialization failed\n", 1);
+	minirt = ft_malloc(sizeof(t_minirt));
 	minirt->mlx = mlx_init();
 	minirt_init_screen(minirt);
 	if (!minirt->mlx)
@@ -39,7 +37,7 @@ t_minirt	*minirt_init(void)
 	minirt->img_height, "minirt");
 	if (!minirt->win)
 		ft_close(minirt, "Error: window initialization failed\n", 1);
-	minirt->img = malloc(sizeof(t_data));
+	minirt->img = ft_malloc(sizeof(t_data));
 	minirt->img->img_ptr = mlx_new_image(minirt->mlx, minirt->img_width, \
 	minirt->img_height);
 	if (!minirt->img->img_ptr)
@@ -47,7 +45,18 @@ t_minirt	*minirt_init(void)
 	minirt->img->addr = mlx_get_data_addr(minirt->img->img_ptr, \
 	&(minirt->img->bits_per_pixel), &(minirt->img->size_line), \
 	&minirt->img->endian);
+	minirt->objects = NULL;
 	return (minirt);
+}
+
+void	minirt_parse(t_minirt *minirt)
+{
+	minirt->objects = ft_malloc(sizeof(t_object *));
+	*(minirt->objects) = NULL;
+	object_add_back(minirt->objects, object(SPHERE, \
+	sphere(vec(0, -100.5, -1), 100)));
+	object_add_back(minirt->objects, object(SPHERE, \
+	sphere(vec(0, 0, -1), 0.5)));
 }
 
 int	main(int argc, char **argv)
@@ -57,7 +66,7 @@ int	main(int argc, char **argv)
 	if (argc == 2 && argv)
 	{
 		minirt = minirt_init();
-		// minirt_parse(&minirt, argv[1]);
+		minirt_parse(minirt);
 		print_color(minirt);
 		// minirt_free(&minirt);
 		mlx_hook(minirt->win, 17, 0, ft_close, minirt);

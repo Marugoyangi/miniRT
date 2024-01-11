@@ -6,17 +6,19 @@
 #    By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/26 19:04:30 by jeongbpa          #+#    #+#              #
-#    Updated: 2024/01/11 17:49:12 by jeongbpa         ###   ########.fr        #
+#    Updated: 2024/01/12 00:51:57 by jeongbpa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_DIR = ./srcs/
 BONUS_DIR = ./bonus_srcs/
 
-SRCS =	$(addprefix $(SRC_DIR), main.c utils.c\
+SRCS =	$(addprefix $(SRC_DIR), main.c\
+								utils/utils.c\
 								vector/vector_ops.c vector/vector_cals.c vector/vector_const.c \
-								ray/ray.c ray/sphere.c\
-								color/color.c color/print.c)
+								ray/ray.c \
+								color/color.c color/print.c\
+								object/object.c object/sphere.c)
 OBJS = $(SRCS:.c=.o)
 
 BONUS_SRCS = 
@@ -28,7 +30,7 @@ BONUS_OBJS = $(BONUS_SRCS:.c=.o)
 
 HEADER = minirt.h
 HEADER_BONUS = minirt_bonus.h
-CFLAGS = -Wall -Wextra -Werror -I./mlx -I./includes/
+CFLAGS = -Wall -Wextra -Werror -I./mlx -I./includes/ -g
 
 CC = CC
 NAME = minirt
