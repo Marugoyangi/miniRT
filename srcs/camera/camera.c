@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 03:45:00 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/12 05:14:03 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/12 07:09:09 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,5 @@ void	set_camera(t_minirt *minirt)
 	minirt->camera.lower_left_corner = vec_sub(minirt->camera.origin, \
 	vec(minirt->camera.viewport_width / 2, minirt->camera.viewport_height / 2, \
 	minirt->camera.focal_length));
-	minirt->camera.samples_per_pixel = 100;
+	minirt->camera.samples_per_pixel = 10;
 }

@@ -6,7 +6,7 @@
 #    By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/26 19:04:30 by jeongbpa          #+#    #+#              #
-#    Updated: 2024/01/12 05:15:41 by jeongbpa         ###   ########.fr        #
+#    Updated: 2024/01/12 06:56:09 by jeongbpa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRCS =	$(addprefix $(SRC_DIR), main.c\
 								vector/vector_ops.c vector/vector_cals.c vector/vector_const.c \
 								ray/ray.c \
 								camera/camera.c\
-								color/color.c color/print.c\
+								color/color.c color/print.c color/diffuse.c\
 								object/object.c object/sphere.c)
 OBJS = $(SRCS:.c=.o)
 
@@ -31,7 +31,7 @@ BONUS_OBJS = $(BONUS_SRCS:.c=.o)
 
 HEADER = minirt.h
 HEADER_BONUS = minirt_bonus.h
-CFLAGS = -Wall -Wextra -Werror -I./mlx -I./includes/
+CFLAGS = -Wall -Wextra -Werror -I./mlx -I./includes/ -g
 
 CC = CC
 NAME = minirt

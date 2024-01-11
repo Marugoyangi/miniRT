@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:24:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/12 04:17:31 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/12 06:54:19 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,9 @@ void			ft_error(char *str);
 double			degree_to_rad(double degree);
 
 //random
-double			random_double(void);
+double			random_double(double min, double max);
 double			random_clamp(double x, double min, double max);
+t_vec			random_vec(double min, double max);
 
 //vector
 t_vec			vec(double x, double y, double z);
@@ -115,5 +116,9 @@ int				hit_object(t_object **objects, t_ray *ray);
 t_sphere		*sphere(t_point center, double radius);
 int				hit_sphere(t_ray *ray, t_sphere *sphere, double t_max, \
 							t_hit_record *rec);
+
+//diffuse
+t_vec			random_on_hemisphere(t_vec normal);
+t_vec			random_in_unit_sphere(void);
 
 #endif

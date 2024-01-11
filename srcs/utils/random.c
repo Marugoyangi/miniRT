@@ -6,11 +6,21 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 02:55:33 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/12 05:21:03 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/12 07:33:20 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+t_vec	random_vec(double min, double max)
+{
+	t_vec	vec;
+
+	vec.x = random_double(min, max);
+	vec.y = random_double(min, max);
+	vec.z = random_double(min, max);
+	return (vec);
+}
 
 double	random_clamp(double x, double min, double max)
 {
@@ -33,20 +43,23 @@ unsigned int	xorshift32(unsigned int *seed)
 	return (x);
 }
 
-double	random_from_memory(void *ptr)
+double	random_from_memory(unsigned int *seed)
 {
-	unsigned long	address;
-	unsigned int	seed;
+	unsigned int		x;
+	unsigned int		y;
+	unsigned long long	z;
 
-	address = (unsigned long)ptr;
-	seed = (unsigned int)address;
-	return ((double)xorshift32(&seed) / 4294967295U);
+	x = xorshift32(seed);
+	y = xorshift32(seed);
+	z = (unsigned long long)x * (unsigned long long)y;
+	return ((double)z / 18446744073709551615U);
 }
 
-double	random_double(void)
+double	random_double(double min, double max)
 {
-	double	rand_num;
+	static unsigned int		seed = 0x12345678;
+	double					tmp;
 
-	rand_num = random_from_memory(&rand_num);
-	return (rand_num);
+	tmp = random_from_memory(&seed);
+	return (min + (max - min) * tmp);
 }

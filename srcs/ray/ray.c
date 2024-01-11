@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:59:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/12 04:05:49 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/12 07:08:28 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,19 @@ t_vec	ray_at(t_ray *ray, double t)
 	return (ret);
 }
 
-t_color	ray_color(t_ray *ray, t_object **objects)
+t_color	ray_color(t_ray *r, t_object **objects)
 {
 	t_vec	unit_direction;
+	t_ray	tmp_ray;
 	double	t;
 
-	if (hit_object(objects, ray))
-		return (vec_mul_const(vec_add_const(ray->record.normal, 1.0), 0.5));
-	unit_direction = vec_unit(ray->direction);
+	if (hit_object(objects, r))
+	{
+		unit_direction = random_on_hemisphere(r->record.normal);
+		tmp_ray = ray(r->record.p, unit_direction);
+		return (vec_mul_const(ray_color(&tmp_ray, objects), 0.5));
+	}
+	unit_direction = vec_unit(r->direction);
 	t = 0.5 * (unit_direction.y + 1.0);
 	return (vec_add(vec_mul_const(vec(1.0, 1.0, 1.0), 1.0 - t) \
 		, vec_mul_const(vec(0.5, 0.7, 1.0), t)));
