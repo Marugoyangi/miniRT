@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:33:52 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/12 06:05:11 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/12 07:52:30 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ void	anti_aliasing(t_minirt *minirt, int x, int y, t_color *pixel_color)
 		tmp = get_ray(minirt->camera, \
 		((x + random_double(0, 1)) / (minirt->img_width - 1)), \
 		((y + random_double(0, 1)) / (minirt->img_height - 1)));
-		*pixel_color = vec_add(*pixel_color, ray_color(&tmp, minirt->objects));
+		*pixel_color = vec_add(*pixel_color, ray_color(&tmp, minirt->objects, \
+		minirt->camera.max_depth));
 		i++;
 	}
 }

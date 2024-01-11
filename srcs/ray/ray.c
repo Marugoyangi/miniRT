@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:59:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/12 07:08:28 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/12 08:53:10 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_ray	ray(t_point origin, t_vec direction)
 	ret.record.normal = vec(0, 0, 0);
 	ret.record.front_face = 0;
 	ret.t_max = INFINITY;
-	ret.t_min = EPSILON;
+	ret.t_min = 0.001;
 	return (ret);
 }
 
@@ -45,17 +45,20 @@ t_vec	ray_at(t_ray *ray, double t)
 	return (ret);
 }
 
-t_color	ray_color(t_ray *r, t_object **objects)
+t_color	ray_color(t_ray *r, t_object **objects, int depth)
 {
 	t_vec	unit_direction;
 	t_ray	tmp_ray;
 	double	t;
 
+	if (depth <= 0)
+		return (color(0, 0, 0));
 	if (hit_object(objects, r))
 	{
-		unit_direction = random_on_hemisphere(r->record.normal);
+		unit_direction = vec_add(r->record.normal, \
+		random_on_hemisphere(r->record.normal));
 		tmp_ray = ray(r->record.p, unit_direction);
-		return (vec_mul_const(ray_color(&tmp_ray, objects), 0.5));
+		return (vec_mul_const(ray_color(&tmp_ray, objects, depth - 1), 0.5));
 	}
 	unit_direction = vec_unit(r->direction);
 	t = 0.5 * (unit_direction.y + 1.0);

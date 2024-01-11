@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:24:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/12 06:54:19 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/12 08:21:17 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ typedef struct s_minirt
 }				t_minirt;
 
 # define PI			3.1415926535897932385
-# define EPSILON	1e-6	//0.000001
 
 # define SPHERE		1
 # define PLANE		2
@@ -97,7 +96,7 @@ t_color			color(double r, double g, double b);
 
 //ray
 t_ray			ray(t_point origin, t_vec direction);
-t_color			ray_color(t_ray *ray, t_object **objects);
+t_color			ray_color(t_ray *ray, t_object **objects, int depth);
 t_vec			ray_at(t_ray *ray, double t);
 void			set_face_normal(t_ray *ray, t_vec outward_normal, \
 								t_hit_record *rec);
