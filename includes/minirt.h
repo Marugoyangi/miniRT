@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:24:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/11 18:35:49 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/11 19:03:17 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ unsigned int	set_color(t_color color);
 
 //ray
 t_color			ray_color(t_ray ray);
-int				hit_sphere(t_point center, double r, t_ray ray);
+t_vec			ray_at(t_ray ray, double t);
+double			hit_sphere(t_point center, double r, t_ray ray);
 
 #endif

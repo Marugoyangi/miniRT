@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:33:52 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/11 18:40:07 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/11 19:31:38 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	set_pixel(t_minirt *minirt, int x, int y, unsigned int color)
 	c_color[2] = color >> 8 & 0xFF;
 	c_color[3] = color >> 0 & 0xFF;
 	i = (x * minirt->img->bits_per_pixel / 8)
-		+ (y * minirt->img->size_line);
+		+ ((minirt->img_height - 1 - y) * minirt->img->size_line);
 	if (minirt->img->endian == 0)
 	{
 		minirt->img->addr[i] = c_color[3];
@@ -54,9 +54,9 @@ void	print_color(t_minirt *minirt)
 	int				y;
 	t_ray			ray;
 
-	y = minirt->img_height;
+	y = 0;
 	ray.origin = vec(0, 0, 0);
-	while (y >= 0)
+	while (y < minirt->img_height)
 	{
 		x = 0;
 		while (x < minirt->img_width)
@@ -69,7 +69,7 @@ void	print_color(t_minirt *minirt)
 			set_pixel(minirt, x, y, set_color(ray_color(ray)));
 			x++;
 		}
-		y--;
+		y++;
 	}
 	mlx_put_image_to_window(minirt->mlx, minirt->win, \
 	minirt->img->img_ptr, 0, 0);
