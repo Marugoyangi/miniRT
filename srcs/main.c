@@ -6,11 +6,23 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:25:06 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/11 17:10:34 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/11 18:27:27 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+void	minirt_init_screen(t_minirt *minirt)
+{
+	int	aspect_ratio;
+
+	aspect_ratio = 16 / 9;
+	minirt->img_width = 800;
+	minirt->img_height = (int)minirt->img_width / aspect_ratio;
+	minirt->viewpoint_height = 2;
+	minirt->viewpoint_width = minirt->viewpoint_height * aspect_ratio;
+	minirt->focal_length = 1;
+}
 
 t_minirt	*minirt_init(void)
 {
@@ -20,11 +32,7 @@ t_minirt	*minirt_init(void)
 	if (!minirt)
 		ft_close(NULL, "Error: minirt initialization failed\n", 1);
 	minirt->mlx = mlx_init();
-	minirt->img_width = 800;
-	minirt->img_height = 600;
-	minirt->viewpoint_width = 2;
-	minirt->viewpoint_height = 2;
-	minirt->focal_length = 1;
+	minirt_init_screen(minirt);
 	if (!minirt->mlx)
 		ft_close(minirt, "Error: mlx initialization failed\n", 1);
 	minirt->win = mlx_new_window(minirt->mlx, minirt->img_width, \

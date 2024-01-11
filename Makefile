@@ -6,7 +6,7 @@
 #    By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/26 19:04:30 by jeongbpa          #+#    #+#              #
-#    Updated: 2024/01/11 16:57:19 by jeongbpa         ###   ########.fr        #
+#    Updated: 2024/01/11 17:49:12 by jeongbpa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ BONUS_DIR = ./bonus_srcs/
 
 SRCS =	$(addprefix $(SRC_DIR), main.c utils.c\
 								vector/vector_ops.c vector/vector_cals.c vector/vector_const.c \
-								ray/ray.c \
+								ray/ray.c ray/sphere.c\
 								color/color.c color/print.c)
 OBJS = $(SRCS:.c=.o)
 

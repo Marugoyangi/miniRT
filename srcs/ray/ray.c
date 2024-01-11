@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:59:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/11 16:49:09 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/11 17:48:37 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ t_color	ray_color(t_ray ray)
 	t_vec	unit_direction;
 	double	t;
 
+	if (hit_sphere(vec(0, 0, -1), 0.5, ray))
+		return (vec(1, 0, 0));
 	unit_direction = vec_unit(ray.direction);
 	t = 0.5 * (unit_direction.y + 1.0);
 	return (vec_add(vec_mul_const(vec(1.0, 1.0, 1.0), 1.0 - t) \

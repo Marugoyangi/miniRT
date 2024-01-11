@@ -1,38 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   color.c                                            :+:      :+:    :+:   */
+/*   sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 12:50:28 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/11 17:43:55 by jeongbpa         ###   ########.fr       */
+/*   Created: 2024/01/11 17:39:06 by jeongbpa          #+#    #+#             */
+/*   Updated: 2024/01/11 17:47:52 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-unsigned int	set_argb(int t, int r, int g, int b)
+int	hit_sphere(t_point center, double r, t_ray ray)
 {
-	return ((t << 24 | r << 16 | g << 8 | b));
+	t_vec	oc;
+	double	a;
+	double	b;
+	double	c;
+	double	discriminant;
+
+	oc = vec_sub(ray.origin, center);
+	a = vec_dot(ray.direction, ray.direction);
+	b = 2.0 * vec_dot(oc, ray.direction);
+	c = vec_dot(oc, oc) - r * r;
+	discriminant = b * b - 4 * a * c;
+	if (discriminant < 0)
+		return (0);
+	else
+		return (1);
 }
 
-unsigned int	set_color(t_color color)
-{
-	int		rgb[3];
-
-	rgb[0] = (int)(255.999 * color.x);
-	rgb[1] = (int)(255.999 * color.y);
-	rgb[2] = (int)(255.999 * color.z);
-	return (set_argb(0, rgb[0], rgb[1], rgb[2]));
-}
-
-t_color	color(double r, double g, double b)
-{
-	t_color	color;
-
-	color.x = r;
-	color.y = g;
-	color.z = b;
-	return (color);
-}

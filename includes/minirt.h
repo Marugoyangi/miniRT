@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:24:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/11 16:50:42 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/11 17:48:54 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,33 +50,34 @@ typedef struct s_minirt
 }				t_minirt;
 
 //functions
-int		ft_close(t_minirt *minirt, char *error, int flag);
-void	print_color(t_minirt *minirt);
+int				ft_close(t_minirt *minirt, char *error, int flag);
+void			print_color(t_minirt *minirt);
 
 //vector
-t_vec	vec(double x, double y, double z);
-t_vec	vec_add(t_vec vec1, t_vec vec2);
-t_vec	vec_sub(t_vec vec1, t_vec vec2);
-t_vec	vec_mul(t_vec vec1, t_vec vec2);
-t_vec	vec_div(t_vec vec1, t_vec vec2);
+t_vec			vec(double x, double y, double z);
+t_vec			vec_add(t_vec vec1, t_vec vec2);
+t_vec			vec_sub(t_vec vec1, t_vec vec2);
+t_vec			vec_mul(t_vec vec1, t_vec vec2);
+t_vec			vec_div(t_vec vec1, t_vec vec2);
 
 //cals
-double	vec_dot(t_vec vec1, t_vec vec2);
-t_vec	vec_cross(t_vec vec1, t_vec vec2);
-double	vec_length(t_vec vec);
-t_vec	vec_unit(t_vec vec);
+double			vec_dot(t_vec vec1, t_vec vec2);
+t_vec			vec_cross(t_vec vec1, t_vec vec2);
+double			vec_length(t_vec vec);
+t_vec			vec_unit(t_vec vec);
 
 //const cals
-t_vec	vec_div_const(t_vec vec, double c);
-t_vec	vec_add_const(t_vec vec, double c);
-t_vec	vec_sub_const(t_vec vec, double c);
-t_vec	vec_mul_const(t_vec vec, double c);
-t_vec	vec_dot_const(t_vec vec, double c);
+t_vec			vec_div_const(t_vec vec, double c);
+t_vec			vec_add_const(t_vec vec, double c);
+t_vec			vec_sub_const(t_vec vec, double c);
+t_vec			vec_mul_const(t_vec vec, double c);
+t_vec			vec_dot_const(t_vec vec, double c);
 
 //color
 unsigned int	set_color(t_color color);
 
 //ray
-t_color	ray_color(t_ray ray);
+t_color			ray_color(t_ray ray);
+int				hit_sphere(t_point center, double r, t_ray ray);
 
 #endif
