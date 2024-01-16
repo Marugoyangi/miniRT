@@ -1,32 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sphere.c                                           :+:      :+:    :+:   */
+/*   camera_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/11 17:39:06 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/11 19:25:37 by jeongbpa         ###   ########.fr       */
+/*   Created: 2024/01/17 07:18:54 by jeongbpa          #+#    #+#             */
+/*   Updated: 2024/01/17 07:19:45 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-double	hit_sphere(t_point center, double r, t_ray ray)
+t_vec	random_in_unit_disk(void)
 {
-	t_vec	oc;
-	double	a;
-	double	b;
-	double	c;
-	double	discriminant;
+	t_vec	p;
 
-	oc = vec_sub(ray.origin, center);
-	a = vec_dot(ray.direction, ray.direction);
-	b = 2.0 * vec_dot(oc, ray.direction);
-	c = vec_dot(oc, oc) - r * r;
-	discriminant = b * b - 4 * a * c;
-	if (discriminant < 0)
-		return (-1.0);
-	else
-		return ((-b - sqrt(discriminant)) / (2.0 * a));
+	while (1)
+	{
+		p = vec(random_double(-1, 1), random_double(-1, 1), 0);
+		if (vec_length_squared(p) < 1.0)
+			return (p);
+	}
 }

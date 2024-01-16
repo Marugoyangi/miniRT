@@ -1,36 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ray.h                                              :+:      :+:    :+:   */
+/*   vector_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/11 19:02:13 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/16 08:24:05 by jeongbpa         ###   ########.fr       */
+/*   Created: 2024/01/16 06:33:07 by jeongbpa          #+#    #+#             */
+/*   Updated: 2024/01/16 10:52:55 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RAY_H
-# define RAY_H
+#include "minirt.h"
 
-# include "minirt.h"
-
-typedef struct s_hit_record
+int	is_near_zero(t_vec vec)
 {
-	t_point		p;
-	t_vec		normal;
-	double		t;
-	int			front_face;
-	int			hit_anything;
-	t_material	material;
-}				t_hit_record;
+	double	s;
 
-typedef struct s_ray
-{
-	t_point			origin;
-	t_vec			direction;
-	double			t_min;
-	double			t_max;
-}				t_ray;
+	s = 1e-8;
+	return ((fabs(vec.x) < s) && (fabs(vec.y) < s) && (fabs(vec.z) < s));
+}
 
-#endif

@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:24:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/12 08:21:17 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/17 07:20:22 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 
 //including headers
 # include "vector.h"
-# include "ray.h"
 # include "object.h"
+# include "ray.h"
 # include "camera.h"
 
 //mlx data type
@@ -52,10 +52,16 @@ typedef struct s_minirt
 
 # define PI			3.1415926535897932385
 
+//object type
 # define SPHERE		1
 # define PLANE		2
 # define CYLINDER	3
 # define CONE		4
+
+//material type
+# define LAMBERTIAN	1
+# define METAL		2
+# define DIELECTRIC	3
 
 //utils
 int				ft_close(t_minirt *minirt, char *error, int flag);
@@ -75,19 +81,22 @@ t_vec			vec_sub(t_vec vec1, t_vec vec2);
 t_vec			vec_mul(t_vec vec1, t_vec vec2);
 t_vec			vec_div(t_vec vec1, t_vec vec2);
 
-//cals
+//vector cals
 double			vec_dot(t_vec vec1, t_vec vec2);
 t_vec			vec_cross(t_vec vec1, t_vec vec2);
 double			vec_length(t_vec vec);
 t_vec			vec_unit(t_vec vec);
 double			vec_length_squared(t_vec vec);
 
-//const cals
+//vector const cals
 t_vec			vec_div_const(t_vec vec, double c);
 t_vec			vec_add_const(t_vec vec, double c);
 t_vec			vec_sub_const(t_vec vec, double c);
 t_vec			vec_mul_const(t_vec vec, double c);
 t_vec			vec_dot_const(t_vec vec, double c);
+
+//vector utils
+int				is_near_zero(t_vec vec);
 
 //color
 unsigned int	set_color(t_color color, int samples_per_pixel);
@@ -101,23 +110,41 @@ t_vec			ray_at(t_ray *ray, double t);
 void			set_face_normal(t_ray *ray, t_vec outward_normal, \
 								t_hit_record *rec);
 
+//scatter
+int				scatter(t_ray *_ray, t_hit_record *rec, t_ray *scattered);
+t_vec			reflect(t_vec vec, t_vec normal);
+t_vec			refract(t_vec vec, t_vec normal, double ratio, double cos_theta);
+double			reflectance(double cosine, double ratio);
+
 //camera
 void			set_camera(t_minirt *minirt);
-t_ray			get_ray(t_camera camera, double u, double v);
+t_ray			get_ray(t_minirt *minirt, double u, double v);
+
+//camera utils
+t_vec			random_in_unit_disk(void);
 
 //object
 t_object		*object(int type, void *element);
 void			object_clear(t_object **objects);
 void			object_add_back(t_object **objects, t_object *new);
-int				hit_object(t_object **objects, t_ray *ray);
+int				hit_object(t_object **objects, t_ray *ray, t_hit_record *rec);
+
+//material
+t_material		material(int type, t_vec albedo, double fuzz, double ref_idx);
+int				metal_scatter(t_ray *_ray, t_hit_record *rec, \
+				t_color *attenuation, t_ray *scattered);
+int				lambertian_scatter(t_hit_record *rec, t_color *attenuation, \
+				t_ray *scattered);
+int				dielectric_scatter(t_ray *_ray, t_hit_record *rec, \
+				t_color *attenuation, t_ray *scattered);
 
 //sphere
-t_sphere		*sphere(t_point center, double radius);
+t_sphere		*sphere(t_point center, double radius, t_material material);
 int				hit_sphere(t_ray *ray, t_sphere *sphere, double t_max, \
 							t_hit_record *rec);
 
 //diffuse
 t_vec			random_on_hemisphere(t_vec normal);
-t_vec			random_in_unit_sphere(void);
+t_vec			random_in_sphere(void);
 
 #endif

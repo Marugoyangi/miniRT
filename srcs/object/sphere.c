@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 17:39:06 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/12 02:47:54 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/16 11:23:47 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,23 @@ int	hit_sphere(t_ray *ray, t_sphere *sphere, double t_max, t_hit_record *rec)
 		return (0);
 	discriminant = sqrt(discriminant);
 	c = (-half_b - discriminant) / a;
-	if (c < ray->t_min || c > t_max)
+	if (c <= ray->t_min || c >= t_max)
 	{
 		c = (-half_b + discriminant) / a;
-		if (c < ray->t_min || c > t_max)
+		if (c <= ray->t_min || c >= t_max)
 			return (0);
 	}
 	hit_sphere_record(c, sphere, rec, ray);
 	return (1);
 }
 
-t_sphere	*sphere(t_point center, double radius)
+t_sphere	*sphere(t_point center, double radius, t_material material)
 {
 	t_sphere	*ret;
 
 	ret = (t_sphere *)ft_malloc(sizeof(t_sphere));
 	ret->center = center;
 	ret->radius = radius;
+	ret->material = material;
 	return (ret);
 }

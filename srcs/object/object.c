@@ -6,19 +6,19 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 22:25:15 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/12 02:50:09 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/16 08:27:46 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	hit_object(t_object **objects, t_ray *ray)
+int	hit_object(t_object **objects, t_ray *ray, t_hit_record *rec)
 {
 	t_object		*tmp;
 	t_hit_record	tmp_rec;
 	double			closest;
 
-	ray->record.hit_anything = 0;
+	rec->hit_anything = 0;
 	tmp = *objects;
 	closest = ray->t_max;
 	while (tmp)
@@ -26,13 +26,14 @@ int	hit_object(t_object **objects, t_ray *ray)
 		if ((tmp)->type == SPHERE && hit_sphere(ray, \
 		(t_sphere *)tmp->element, closest, &tmp_rec))
 		{
-			ray->record.hit_anything = 1;
-			ray->record = tmp_rec;
+			*rec = tmp_rec;
+			rec->hit_anything = 1;
+			rec->material = ((t_sphere *)tmp->element)->material;
 			closest = tmp_rec.t;
 		}
 		tmp = tmp->next;
 	}
-	return (ray->record.hit_anything);
+	return (rec->hit_anything);
 }
 
 t_object	*object(int type, void *element)
