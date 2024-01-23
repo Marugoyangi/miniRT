@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:24:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/17 07:20:22 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/24 03:31:52 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 
 //including headers
 # include "vector.h"
+# include "interval.h"
+# include "texture.h"
 # include "object.h"
 # include "ray.h"
 # include "camera.h"
@@ -47,7 +49,10 @@ typedef struct s_minirt
 	int			img_width;
 	int			img_height;
 	t_camera	camera;
-	t_object	**objects;
+	t_object	*object;
+	t_bvh		*bvh;
+	t_aabb		box;
+	int			thread_num;
 }				t_minirt;
 
 # define PI			3.1415926535897932385
@@ -62,6 +67,11 @@ typedef struct s_minirt
 # define LAMBERTIAN	1
 # define METAL		2
 # define DIELECTRIC	3
+
+//texture type
+# define SOLID		1
+# define CHECKER	2
+# define IMAGE		3
 
 //utils
 int				ft_close(t_minirt *minirt, char *error, int flag);
@@ -97,15 +107,17 @@ t_vec			vec_dot_const(t_vec vec, double c);
 
 //vector utils
 int				is_near_zero(t_vec vec);
+double			q_rsqrt(double number);
 
 //color
 unsigned int	set_color(t_color color, int samples_per_pixel);
 void			print_color(t_minirt *minirt);
+void			multi_thread(t_minirt *minirt);
 t_color			color(double r, double g, double b);
 
 //ray
-t_ray			ray(t_point origin, t_vec direction);
-t_color			ray_color(t_ray *ray, t_object **objects, int depth);
+t_ray			ray(t_point origin, t_vec direction, double time);
+t_color			ray_color(t_bvh *node, t_ray *r, int depth);
 t_vec			ray_at(t_ray *ray, double t);
 void			set_face_normal(t_ray *ray, t_vec outward_normal, \
 								t_hit_record *rec);
@@ -126,25 +138,73 @@ t_vec			random_in_unit_disk(void);
 //object
 t_object		*object(int type, void *element);
 void			object_clear(t_object **objects);
-void			object_add_back(t_object **objects, t_object *new);
-int				hit_object(t_object **objects, t_ray *ray, t_hit_record *rec);
+void			object_add_back(t_minirt *minirt, t_object *new);
+int				hit_object(t_object *object, t_ray *ray, t_interval *closest, \
+				t_hit_record *rec);
+
+//object_utisl
+t_object		*object_copy(t_object **object, int idx);
 
 //material
 t_material		material(int type, t_vec albedo, double fuzz, double ref_idx);
 int				metal_scatter(t_ray *_ray, t_hit_record *rec, \
 				t_color *attenuation, t_ray *scattered);
-int				lambertian_scatter(t_hit_record *rec, t_color *attenuation, \
+int				lambertian_scatter(t_ray *_ray, t_hit_record *rec, t_color *attenuation, \
 				t_ray *scattered);
 int				dielectric_scatter(t_ray *_ray, t_hit_record *rec, \
 				t_color *attenuation, t_ray *scattered);
 
 //sphere
-t_sphere		*sphere(t_point center, double radius, t_material material);
-int				hit_sphere(t_ray *ray, t_sphere *sphere, double t_max, \
+t_sphere		*sphere(t_point center, double radius, t_material material, \
+				t_vec velocity);
+int				hit_sphere(t_ray *ray, t_sphere *sphere, double t, \
 							t_hit_record *rec);
 
 //diffuse
 t_vec			random_on_hemisphere(t_vec normal);
 t_vec			random_in_sphere(void);
 
+//interval
+t_interval	interval(double min, double max);
+int	interval_is_overlap(t_interval a, t_interval b);
+t_interval	interval_padding(t_interval interval, double padding);
+double	interval_size(t_interval interval);
+t_interval	interval_union(t_interval a, t_interval b);
+
+//aabb
+t_aabb	aabb_b(t_aabb a, t_aabb b);
+t_aabb	aabb(t_point min, t_point max);
+t_interval	axis(t_aabb aabb, int n);
+int	aabb_hit(t_aabb aabb, t_ray *ray, t_interval ray_t);
+
+//aabb_utils
+void	ft_swap(double *a, double *b);
+t_aabb	get_box(t_object *object);
+
+//bvh
+int		bvh_hit(t_bvh *node, t_ray *ray, t_interval *closest, t_hit_record *rec);
+t_bvh	*bvh_node(t_object **objects, int start, int end);
+
+//bvh_compare
+int	box_compare_x(t_object *a, t_object *b);
+int	box_compare_y(t_object *a, t_object *b);
+int	box_compare_z(t_object *a, t_object *b);
+
+//bvh_utils
+t_object	**object_vector(t_object **object, int start, int end);
+t_object	**object_vector_init(t_object *object, int start, int end);
+int			ft_lstsize(t_object *lst);
+void		sort_bvh(t_object **objects, int start, int end, \
+				int (*comparator)(t_object *, t_object *));
+void			bvh_search(t_object *root, t_ray *r, t_interval *closes, \
+				t_hit_record *rec);
+
+//texture
+t_color	checker(t_checker *checker, t_hit_record *rec);
+
+
+//image
+t_color	image_color(t_texture *texture, t_image *image, t_hit_record *rec);
+t_image	*image_init(void *mlx, char *path);
+t_color	image_normal(t_minirt *minirt, t_hit_record *rec);
 #endif

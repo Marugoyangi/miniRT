@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 06:58:27 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/16 11:55:27 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/24 03:32:50 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,29 @@ int	dielectric_scatter(t_ray *_ray, t_hit_record *rec, t_color *attenuation, \
 	else
 		result = refract(unit_direction, rec->normal, refraction_ratio, \
 			cos_theta);
-	*scattered = ray(rec->p, result);
+	*scattered = ray(rec->p, result, _ray->time);
 	*attenuation = color(1.0, 1.0, 1.0);
 	return (1);
 }
 
-int	lambertian_scatter(t_hit_record *rec, t_color *attenuation, \
+int	lambertian_scatter(t_ray *_ray, t_hit_record *rec, t_color *attenuation, \
 				t_ray *scattered)
 {
-	t_vec	scattered_direction;
-	t_vec	random_vec;
+	t_vec		scattered_direction;
+	t_vec		random_vec;
 
 	random_vec = random_in_sphere();
 	random_vec = vec_unit(random_vec);
 	scattered_direction = vec_add(rec->normal, random_vec);
 	if (is_near_zero(scattered_direction))
 		scattered_direction = rec->normal;
-	*scattered = ray(rec->p, scattered_direction);
-	*attenuation = rec->material.albedo;
+	*scattered = ray(rec->p, scattered_direction, _ray->time);
+	if (rec->material.texture.type == CHECKER)
+		*attenuation = checker(&rec->material.texture.checker, rec);
+	else if (rec->material.texture.type == IMAGE)
+		*attenuation = image_color(&rec->material.texture, rec->material.texture.image, rec);
+	else
+		*attenuation = rec->material.albedo;
 	return (1);
 }
 
@@ -65,7 +70,7 @@ int	metal_scatter(t_ray *_ray, t_hit_record *rec, t_color *attenuation, \
 	scattered_direction = reflect(vec_unit(_ray->direction), rec->normal);
 	scattered_direction = vec_add(scattered_direction, \
 	vec_mul_const(random_vec, rec->material.fuzz));
-	*scattered = ray(rec->p, scattered_direction);
+	*scattered = ray(rec->p, scattered_direction, _ray->time);
 	*attenuation = rec->material.albedo;
 	return (vec_dot(scattered->direction, rec->normal) > 0);
 }

@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 06:26:05 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/16 11:55:58 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/23 17:06:22 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	scatter(t_ray *_ray, t_hit_record *rec, t_ray *scattered)
 	if (rec->material.type == METAL)
 		return (metal_scatter(_ray, rec, &rec->material.albedo, scattered));
 	else if (rec->material.type == LAMBERTIAN)
-		return (lambertian_scatter(rec, &rec->material.albedo, \
+		return (lambertian_scatter(_ray, rec, &rec->material.albedo, \
 		scattered));
 	else if (rec->material.type == DIELECTRIC)
 		return (dielectric_scatter(_ray, rec, &rec->material.albedo, \

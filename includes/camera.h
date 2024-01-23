@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 03:40:48 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/17 07:22:28 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/17 14:54:15 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,6 @@ typedef struct s_camera
 	double		focus_distance;
 	t_vec		vertical_up;
 	t_basis		basis;
+	int			k;
 }				t_camera;
 #endif

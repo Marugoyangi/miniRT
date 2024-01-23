@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 03:45:00 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/17 08:01:16 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/23 19:23:17 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ t_ray	get_ray(t_minirt *minirt, double u, double v)
 	t_camera	camera;
 	t_vec		dof_org;
 	t_vec		dof_sample;
+	double		random;
 
 	camera = minirt->camera;
 	if (camera.dof_angle > 0)
@@ -28,11 +29,12 @@ t_ray	get_ray(t_minirt *minirt, double u, double v)
 	}
 	else
 		dof_org = camera.origin;
+	random = random_double(0.0, 1.0);
 	return (ray(dof_org, vec_sub(vec_add(\
 			camera.basis.lower_left_corner, \
 			vec_add(vec_mul_const(camera.basis.viewport_u, u), \
 			vec_mul_const(camera.basis.viewport_v, v))), \
-			dof_org)));
+			dof_org), random));
 }
 
 void	set_camera_basis(t_minirt *minirt)
@@ -72,10 +74,11 @@ void	set_camera(t_minirt *minirt)
 	minirt->camera.vertical_up = vec(0, 1, 0);
 	minirt->camera.dof_angle = 0.6;
 	minirt->camera.focus_distance = 10.0;
-	minirt->camera.samples_per_pixel = 10;
+	minirt->camera.samples_per_pixel = 50;
 	height = tan(degree_to_rad(camera->fov) / 2);
 	camera->viewport_height = 2.0 * height * camera->focus_distance;
 	camera->viewport_width = camera->aspect_ratio * \
 	camera->viewport_height;
+	camera->k = 1;
 	set_camera_basis(minirt);
 }

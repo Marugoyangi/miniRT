@@ -6,32 +6,27 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 22:25:15 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/16 08:27:46 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/23 20:05:31 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	hit_object(t_object **objects, t_ray *ray, t_hit_record *rec)
+int	hit_object(t_object *object, t_ray *ray, t_interval *closest, t_hit_record *rec)
 {
 	t_object		*tmp;
 	t_hit_record	tmp_rec;
-	double			closest;
 
-	rec->hit_anything = 0;
-	tmp = *objects;
-	closest = ray->t_max;
-	while (tmp)
+	tmp = object;
+	if (tmp == NULL)
+		return (0);
+	if ((tmp)->type == SPHERE && hit_sphere(ray, \
+		(t_sphere *)tmp->element, closest->max, &tmp_rec))
 	{
-		if ((tmp)->type == SPHERE && hit_sphere(ray, \
-		(t_sphere *)tmp->element, closest, &tmp_rec))
-		{
-			*rec = tmp_rec;
-			rec->hit_anything = 1;
-			rec->material = ((t_sphere *)tmp->element)->material;
-			closest = tmp_rec.t;
-		}
-		tmp = tmp->next;
+		*rec = tmp_rec;
+		rec->hit_anything = 1;
+		rec->material = ((t_sphere *)tmp->element)->material;
+		closest->max = tmp_rec.t;
 	}
 	return (rec->hit_anything);
 }
@@ -43,27 +38,47 @@ t_object	*object(int type, void *element)
 	object = (t_object *)ft_malloc(sizeof(t_object));
 	object->type = type;
 	if (type == SPHERE)
+	{
 		object->element = (t_sphere *)element;
+		object->bbox = ((t_sphere *)element)->bounding_box;
+	}
 	else if (type == PLANE)
+	{
 		object->element = (t_plane *)element;
+		object->bbox = ((t_plane *)element)->bounding_box;
+	}
 	else if (type == CYLINDER)
+	{
 		object->element = (t_cylinder *)element;
+		object->bbox = ((t_cylinder *)element)->bounding_box;
+	}
 	else if (type == CONE)
+	{
 		object->element = (t_cone *)element;
+		object->bbox = ((t_cone *)element)->bounding_box;
+	}
 	object->next = NULL;
 	return (object);
 }
 
-void	object_add_back(t_object **objects, t_object *new)
+void	object_add_back(t_minirt *minirt, t_object *new)
 {
 	t_object	*last;
 
-	if (!*objects)
+	if (new->type == SPHERE)
+		minirt->box = aabb_b(minirt->box, (((t_sphere *)new->element)->bounding_box));
+	else if (new->type == PLANE)
+		minirt->box = aabb_b(minirt->box, (((t_plane *)new->element)->bounding_box));
+	else if (new->type == CYLINDER)
+		minirt->box = aabb_b(minirt->box, (((t_cylinder *)new->element)->bounding_box));
+	else if (new->type == CONE)
+		minirt->box = aabb_b(minirt->box, (((t_cone *)new->element)->bounding_box));
+	last = minirt->object;
+	if (!last)
 	{
-		*objects = new;
+		minirt->object = new;
 		return ;
 	}
-	last = *objects;
 	while (last->next)
 		last = last->next;
 	last->next = new;

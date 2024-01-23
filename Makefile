@@ -6,7 +6,7 @@
 #    By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/26 19:04:30 by jeongbpa          #+#    #+#              #
-#    Updated: 2024/01/17 07:50:42 by jeongbpa         ###   ########.fr        #
+#    Updated: 2024/01/23 22:32:08 by jeongbpa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,10 @@ SRCS =	$(addprefix $(SRC_DIR), main.c\
 								ray/ray.c ray/scatter.c\
 								camera/camera.c camera/camera_utils.c\
 								color/color.c color/render.c color/diffuse.c\
-								object/object.c object/sphere.c object/material.c)
+								object/object.c object/sphere.c object/material.c object/object_utils.c\
+								bvh/bvh.c bvh/bvh_utils.c bvh/bvh_compare.c \
+								bvh/interval.c bvh/aabb.c bvh/aabb_utils.c \
+								texture/checker.c texture/image.c)
 OBJS = $(SRCS:.c=.o)
 
 BONUS_SRCS = 
@@ -31,9 +34,9 @@ BONUS_OBJS = $(BONUS_SRCS:.c=.o)
 
 HEADER = minirt.h
 HEADER_BONUS = minirt_bonus.h
-CFLAGS = -Wall -Wextra -Werror -I./mlx -I./includes/
+CFLAGS = -Wall -Wextra -Werror -I./mlx -I./includes/ -g
 
-CC = CC
+CC = cc
 NAME = minirt
 LIBMLX = ./mlx/libmlx.a
 

@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 02:55:33 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/16 12:11:20 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/23 19:33:54 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,9 @@ unsigned int	xorshift32(unsigned int *seed)
 double	random_from_memory(unsigned int *seed)
 {
 	unsigned int		x;
-	unsigned int		y;
-	unsigned int		z;
 
 	x = xorshift32(seed);
-	y = xorshift32(seed);
-	z = x * y;
-	return ((double)z / 4294967295U);
+	return ((double)x / 4294967295U);
 }
 
 double	random_double(double min, double max)
