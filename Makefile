@@ -6,7 +6,7 @@
 #    By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/26 19:04:30 by jeongbpa          #+#    #+#              #
-#    Updated: 2024/01/23 22:32:08 by jeongbpa         ###   ########.fr        #
+#    Updated: 2024/01/26 07:05:29 by jeongbpa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,9 +20,10 @@ SRCS =	$(addprefix $(SRC_DIR), main.c\
 								camera/camera.c camera/camera_utils.c\
 								color/color.c color/render.c color/diffuse.c\
 								object/object.c object/sphere.c object/material.c object/object_utils.c\
+								object/quad.c \
 								bvh/bvh.c bvh/bvh_utils.c bvh/bvh_compare.c \
 								bvh/interval.c bvh/aabb.c bvh/aabb_utils.c \
-								texture/checker.c texture/image.c)
+								texture/checker.c texture/image.c texture/perlin.c)
 OBJS = $(SRCS:.c=.o)
 
 BONUS_SRCS = 

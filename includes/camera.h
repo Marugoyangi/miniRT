@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 03:40:48 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/17 14:54:15 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/26 08:54:10 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ typedef struct s_basis
 
 typedef struct s_camera
 {
-	double		aspect_ratio;
 	double		viewport_height;
 	double		viewport_width;
 	t_point		origin;

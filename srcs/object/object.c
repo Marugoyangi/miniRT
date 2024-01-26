@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 22:25:15 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/23 20:05:31 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/26 07:23:40 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,21 @@ int	hit_object(t_object *object, t_ray *ray, t_interval *closest, t_hit_record *
 	if ((tmp)->type == SPHERE && hit_sphere(ray, \
 		(t_sphere *)tmp->element, closest->max, &tmp_rec))
 	{
+		tmp_rec.img_height = rec->img_height;
+		tmp_rec.img_width = rec->img_width;
 		*rec = tmp_rec;
 		rec->hit_anything = 1;
 		rec->material = ((t_sphere *)tmp->element)->material;
+		closest->max = tmp_rec.t;
+	}
+	else if ((tmp)->type == QUAD && hit_quad(ray, \
+		(t_quad *)tmp->element, closest->max, &tmp_rec))
+	{
+		tmp_rec.img_height = rec->img_height;
+		tmp_rec.img_width = rec->img_width;
+		*rec = tmp_rec;
+		rec->hit_anything = 1;
+		rec->material = ((t_quad *)tmp->element)->material;
 		closest->max = tmp_rec.t;
 	}
 	return (rec->hit_anything);
@@ -42,10 +54,10 @@ t_object	*object(int type, void *element)
 		object->element = (t_sphere *)element;
 		object->bbox = ((t_sphere *)element)->bounding_box;
 	}
-	else if (type == PLANE)
+	else if (type == QUAD)
 	{
-		object->element = (t_plane *)element;
-		object->bbox = ((t_plane *)element)->bounding_box;
+		object->element = (t_quad *)element;
+		object->bbox = ((t_quad *)element)->bounding_box;
 	}
 	else if (type == CYLINDER)
 	{
@@ -67,8 +79,8 @@ void	object_add_back(t_minirt *minirt, t_object *new)
 
 	if (new->type == SPHERE)
 		minirt->box = aabb_b(minirt->box, (((t_sphere *)new->element)->bounding_box));
-	else if (new->type == PLANE)
-		minirt->box = aabb_b(minirt->box, (((t_plane *)new->element)->bounding_box));
+	else if (new->type == QUAD)
+		minirt->box = aabb_b(minirt->box, (((t_quad *)new->element)->bounding_box));
 	else if (new->type == CYLINDER)
 		minirt->box = aabb_b(minirt->box, (((t_cylinder *)new->element)->bounding_box));
 	else if (new->type == CONE)

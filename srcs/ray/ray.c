@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 17:53:18 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/23 19:11:37 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/26 02:23:43 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_vec	ray_at(t_ray *ray, double t)
 	return (ret);
 }
 
-t_color	ray_color(t_bvh *node, t_ray *r, int depth)
+t_color	ray_color(t_bvh *node, t_ray *r, int depth, t_minirt *minirt)
 {
 	t_vec			unit_direction;
 	t_ray			tmp_ray;
@@ -52,12 +52,14 @@ t_color	ray_color(t_bvh *node, t_ray *r, int depth)
 	if (depth <= 0)
 		return (color(0, 0, 0));
 	rec.hit_anything = 0;
+	rec.img_width = minirt->img_width;
+	rec.img_height = minirt->img_height;
 	closest = r->t;
 	bvh_hit(node, r, &closest, &rec);
 	if (rec.hit_anything)
 	{
 		if (scatter(r, &rec, &tmp_ray))
-			return (vec_mul(ray_color(node, &tmp_ray, depth - 1), \
+			return (vec_mul(ray_color(node, &tmp_ray, depth - 1, minirt), \
 			rec.material.albedo));
 		return (color(0, 0, 0));
 	}

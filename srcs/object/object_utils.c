@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 18:00:24 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/23 18:00:30 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/26 10:23:40 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,20 @@ t_cylinder	*cylinder_copy(t_cylinder *cylinder)
 	return (new_cylinder);
 }
 
-t_plane	*plane_copy(t_plane *plane)
+t_quad	*quad_copy(t_quad *quad)
 {
-	t_plane	*new_plane;
+	t_quad	*new_quad;
 
-	new_plane = (t_plane *)ft_malloc(sizeof(t_plane));
-	new_plane->center = plane->center;
-	new_plane->normal = plane->normal;
-	new_plane->color = plane->color;
-	new_plane->material = plane->material;
-	new_plane->bounding_box = plane->bounding_box;
-	return (new_plane);
+	new_quad = (t_quad *)ft_malloc(sizeof(t_quad));
+	new_quad->q = quad->q;
+	new_quad->u = quad->u;
+	new_quad->v = quad->v;
+	new_quad->normal = quad->normal;
+	new_quad->w = quad->w;
+	new_quad->d = quad->d;
+	new_quad->material = quad->material;
+	new_quad->bounding_box = quad->bounding_box;
+	return (new_quad);
 }
 
 t_sphere	*sphere_copy(t_sphere *sphere)
@@ -59,7 +62,6 @@ t_sphere	*sphere_copy(t_sphere *sphere)
 	new_sphere = (t_sphere *)ft_malloc(sizeof(t_sphere));
 	new_sphere->center = sphere->center;
 	new_sphere->radius = sphere->radius;
-	new_sphere->color = sphere->color;
 	new_sphere->is_moving = sphere->is_moving;
 	new_sphere->velocity = sphere->velocity;
 	new_sphere->material = sphere->material;
@@ -80,8 +82,8 @@ t_object	*object_copy(t_object **object, int idx)
 	new_object->bbox = tmp->bbox;
 	if (tmp->type == SPHERE)
 		new_object->element = sphere_copy((t_sphere *)tmp->element);
-	else if (tmp->type == PLANE)
-		new_object->element = plane_copy((t_plane *)tmp->element);
+	else if (tmp->type == QUAD)
+		new_object->element = quad_copy((t_quad *)tmp->element);
 	else if (tmp->type == CYLINDER)
 		new_object->element = cylinder_copy((t_cylinder *)tmp->element);
 	else if (tmp->type == CONE)

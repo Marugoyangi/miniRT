@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 08:13:42 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/23 18:17:52 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/26 06:22:05 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,19 @@ t_aabb	aabb_b(t_aabb a, t_aabb b)
 	aabb.x = interval_union(a.x, b.x);
 	aabb.y = interval_union(a.y, b.y);
 	aabb.z = interval_union(a.z, b.z);
+	return (aabb);
+}
+
+t_aabb	aabb_pad(t_aabb aabb)
+{
+	double	padding;
+
+	padding = 0.0001;
+	if (interval_size(aabb.x) < padding)
+		aabb.x = interval_padding(aabb.x, padding);
+	if (interval_size(aabb.y) < padding)
+		aabb.y = interval_padding(aabb.y, padding);
+	if (interval_size(aabb.z) < padding)
+		aabb.z = interval_padding(aabb.z, padding);
 	return (aabb);
 }

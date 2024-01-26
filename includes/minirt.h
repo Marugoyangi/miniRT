@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   miniRT.h                                           :+:      :+:    :+:   */
+/*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:24:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/24 03:31:52 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/26 11:26:45 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,16 @@
 # include <unistd.h>
 # include <string.h>
 # include "../mlx/mlx.h"
+
+//bonus
+# include <pthread.h>
+# define THREAD_MAX	8
+typedef struct s_minirt	t_minirt;
+typedef struct s_thread
+{
+	int			id;
+	t_minirt	*minirt;
+}				t_thread;
 
 //including headers
 # include "vector.h"
@@ -43,23 +53,26 @@ typedef struct s_data
 //general data
 typedef struct s_minirt
 {
-	void		*mlx;
-	void		*win;
-	t_data		*img;
-	int			img_width;
-	int			img_height;
-	t_camera	camera;
-	t_object	*object;
-	t_bvh		*bvh;
-	t_aabb		box;
-	int			thread_num;
+	void			*mlx;
+	void			*win;
+	t_data			*img;
+	int				img_width;
+	int				img_height;
+	double			aspect_ratio;
+	t_camera		camera;
+	t_object		*object;
+	t_bvh			*bvh;
+	t_aabb			box;
+	pthread_t		thread[THREAD_MAX];
+	t_thread		thread_data[THREAD_MAX];
+	pthread_mutex_t	*mutex;
 }				t_minirt;
 
-# define PI			3.1415926535897932385
+# define PI			3.141592653589793238
 
 //object type
 # define SPHERE		1
-# define PLANE		2
+# define QUAD		2
 # define CYLINDER	3
 # define CONE		4
 
@@ -72,6 +85,7 @@ typedef struct s_minirt
 # define SOLID		1
 # define CHECKER	2
 # define IMAGE		3
+# define NOISE		4
 
 //utils
 int				ft_close(t_minirt *minirt, char *error, int flag);
@@ -83,6 +97,7 @@ double			degree_to_rad(double degree);
 double			random_double(double min, double max);
 double			random_clamp(double x, double min, double max);
 t_vec			random_vec(double min, double max);
+int				random_int(int min, int max);
 
 //vector
 t_vec			vec(double x, double y, double z);
@@ -111,13 +126,13 @@ double			q_rsqrt(double number);
 
 //color
 unsigned int	set_color(t_color color, int samples_per_pixel);
-void			print_color(t_minirt *minirt);
+void			print_color(void *thread);
 void			multi_thread(t_minirt *minirt);
 t_color			color(double r, double g, double b);
 
 //ray
 t_ray			ray(t_point origin, t_vec direction, double time);
-t_color			ray_color(t_bvh *node, t_ray *r, int depth);
+t_color			ray_color(t_bvh *node, t_ray *r, int depth, t_minirt *minirt);
 t_vec			ray_at(t_ray *ray, double t);
 void			set_face_normal(t_ray *ray, t_vec outward_normal, \
 								t_hit_record *rec);
@@ -129,7 +144,8 @@ t_vec			refract(t_vec vec, t_vec normal, double ratio, double cos_theta);
 double			reflectance(double cosine, double ratio);
 
 //camera
-void			set_camera(t_minirt *minirt);
+void			set_camera(t_minirt *minirt, int fov, t_vec cam[3],\
+				double dof);
 t_ray			get_ray(t_minirt *minirt, double u, double v);
 
 //camera utils
@@ -160,6 +176,11 @@ t_sphere		*sphere(t_point center, double radius, t_material material, \
 int				hit_sphere(t_ray *ray, t_sphere *sphere, double t, \
 							t_hit_record *rec);
 
+//quad
+t_quad			*quad(t_point q, t_vec u, t_vec v, t_material material);
+int				hit_quad(t_ray *ray, t_quad *quad, double t, \
+							t_hit_record *rec);
+
 //diffuse
 t_vec			random_on_hemisphere(t_vec normal);
 t_vec			random_in_sphere(void);
@@ -176,6 +197,7 @@ t_aabb	aabb_b(t_aabb a, t_aabb b);
 t_aabb	aabb(t_point min, t_point max);
 t_interval	axis(t_aabb aabb, int n);
 int	aabb_hit(t_aabb aabb, t_ray *ray, t_interval ray_t);
+t_aabb	aabb_pad(t_aabb aabb);
 
 //aabb_utils
 void	ft_swap(double *a, double *b);
@@ -207,4 +229,10 @@ t_color	checker(t_checker *checker, t_hit_record *rec);
 t_color	image_color(t_texture *texture, t_image *image, t_hit_record *rec);
 t_image	*image_init(void *mlx, char *path);
 t_color	image_normal(t_minirt *minirt, t_hit_record *rec);
+
+//noise
+void	perlin_generate(t_perlin *perlin, double scale);
+double	noise(t_perlin *perlin, t_point p);
+double	noise_turb(t_perlin *perlin, t_point p);
+
 #endif

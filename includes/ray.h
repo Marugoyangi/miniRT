@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:02:13 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/23 19:42:38 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/26 02:16:20 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ typedef struct s_hit_record
 	int			front_face;
 	int			hit_anything;
 	t_material	material;
+	int			img_width;
+	int			img_height;
 }				t_hit_record;
 
 typedef struct s_ray

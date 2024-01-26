@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 17:39:06 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/24 03:25:33 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/26 09:53:40 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ void	get_sphere_uv(t_hit_record *rec, t_vec p)
 	double	phi;
 	double	theta;
 
-	phi = atan2(-p.z, p.x) + M_PI;
+	phi = atan2(-p.z, p.x) + PI;
 	theta = acos(-p.y);
-	rec->u = phi / (2 * M_PI);
-	rec->v = 1 - theta / M_PI;
+	rec->u = phi / (2 * PI);
+	rec->v = theta / PI;
 }
 
 void	hit_sphere_record(double c, t_sphere *sphere, t_hit_record *rec, \
@@ -34,7 +34,7 @@ void	hit_sphere_record(double c, t_sphere *sphere, t_hit_record *rec, \
 	sphere->radius);
 	set_face_normal(ray, outward_normal, rec);
 	if (sphere->material.texture.type == CHECKER)
-		get_sphere_uv(rec, vec_sub(rec->p, sphere->center));
+		get_sphere_uv(rec, outward_normal);
 	else
 		get_sphere_uv(rec, outward_normal);
 }

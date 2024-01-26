@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:17:56 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/12 00:34:26 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/26 09:15:24 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ int	ft_close(t_minirt *minirt, char *error, int flag)
 		mlx_destroy_window(minirt->mlx, minirt->win);
 	if (minirt->img)
 		free(minirt->img);
-	if (minirt)
-		free(minirt);
 	if (error && flag == 1)
 		ft_error(error);
 	exit(1);

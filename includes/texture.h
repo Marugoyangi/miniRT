@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 19:40:22 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/24 03:13:41 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/26 07:42:57 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,15 @@
 # define TEXTURE_H
 
 typedef struct s_data t_data;
+
+typedef struct s_perlin
+{
+	t_vec		random_vec[256];
+	int			perm_x[256];
+	int			perm_y[256];
+	int			perm_z[256];
+	double		scale;
+}				t_perlin;
 
 typedef struct s_image
 {
@@ -35,6 +44,7 @@ typedef struct	s_texture
 	t_checker	checker;
 	t_image		*image;
 	t_image		*normal_map;
+	t_perlin	perlin;
 	int			is_bumped;
 }				t_texture;
 

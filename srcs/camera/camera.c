@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 03:45:00 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/23 19:23:17 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/26 09:17:14 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,25 +60,24 @@ void	set_camera_basis(t_minirt *minirt)
 	basis->dof_v = vec_mul_const(basis->v, dof_rad);
 }
 
-void	set_camera(t_minirt *minirt)
+void	set_camera(t_minirt *minirt, int fov, t_vec vec[3], double dof)
 {
 	double		height;
 	t_camera	*camera;
 
 	camera = &minirt->camera;
 	minirt->camera.max_depth = 50;
-	minirt->camera.aspect_ratio = 16.0 / 9.0;
-	minirt->camera.fov = 20;
-	minirt->camera.origin = vec(13, 2, 3);
-	minirt->camera.look_at = vec(0, 0, 0);
-	minirt->camera.vertical_up = vec(0, 1, 0);
-	minirt->camera.dof_angle = 0.6;
 	minirt->camera.focus_distance = 10.0;
-	minirt->camera.samples_per_pixel = 50;
+	minirt->camera.samples_per_pixel = 30;
+	camera->k = 1;
+	minirt->camera.fov = fov;
+	minirt->camera.origin = vec[0];
+	minirt->camera.look_at = vec[1];
+	minirt->camera.vertical_up = vec[2];
+	minirt->camera.dof_angle = dof;
 	height = tan(degree_to_rad(camera->fov) / 2);
 	camera->viewport_height = 2.0 * height * camera->focus_distance;
-	camera->viewport_width = camera->aspect_ratio * \
+	camera->viewport_width = minirt->aspect_ratio * \
 	camera->viewport_height;
-	camera->k = 1;
 	set_camera_basis(minirt);
 }

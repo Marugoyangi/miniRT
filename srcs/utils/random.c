@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 02:55:33 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/23 19:33:54 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/26 03:18:59 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ unsigned int	xorshift32(unsigned int *seed)
 	unsigned int	x;
 
 	x = *seed;
-	x ^= x << 13;
-	x ^= x >> 17;
+	x ^= x << 11;
+	x ^= x >> 19;
 	x ^= x << 5;
 	*seed = x;
 	return (x);
@@ -58,4 +58,9 @@ double	random_double(double min, double max)
 
 	tmp = random_from_memory(&seed);
 	return (min + (max - min) * tmp);
+}
+
+int	random_int(int min, int max)
+{
+	return ((int)(random_double(0, 1.0) * (max - min) + min));
 }

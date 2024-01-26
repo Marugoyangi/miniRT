@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 22:13:43 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/23 20:25:37 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/26 07:16:36 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 # include "minirt.h"
 
-typedef struct s_aabb t_aabb;
+typedef struct s_aabb	t_aabb;
+typedef struct s_vec	t_point;
 
 typedef struct s_material
 {
@@ -26,25 +27,27 @@ typedef struct s_material
 	t_texture	texture;
 }	t_material;
 
+typedef struct s_quad
+{
+	t_point		q;
+	t_vec		u;
+	t_vec		v;
+	t_material	material;
+	t_aabb		bounding_box;
+	t_vec		normal;
+	t_vec		w;
+	double		d;
+}	t_quad;
+
 typedef struct s_sphere
 {
 	t_point		center;
 	double		radius;
-	t_color		color;
 	int			is_moving;
 	t_vec		velocity;
 	t_material	material;
 	t_aabb		bounding_box;
 }	t_sphere;
-
-typedef struct s_plane
-{
-	t_point		center;
-	t_vec		normal;
-	t_color		color;
-	t_material	material;
-	t_aabb		bounding_box;
-}	t_plane;
 
 typedef struct s_cylinder
 {

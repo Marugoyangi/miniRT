@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 06:58:27 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/24 03:32:50 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/26 09:54:12 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,10 @@ int	lambertian_scatter(t_ray *_ray, t_hit_record *rec, t_color *attenuation, \
 		*attenuation = checker(&rec->material.texture.checker, rec);
 	else if (rec->material.texture.type == IMAGE)
 		*attenuation = image_color(&rec->material.texture, rec->material.texture.image, rec);
+	else if (rec->material.texture.type == NOISE)
+		*attenuation = vec_mul_const(vec(1, 1, 1), \
+		0.5 * (1 + sin(rec->material.texture.perlin.scale * rec->p.z \
+		+ 10 * noise_turb(&rec->material.texture.perlin, rec->p))));
 	else
 		*attenuation = rec->material.albedo;
 	return (1);
