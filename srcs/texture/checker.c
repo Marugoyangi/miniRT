@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 19:48:37 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/26 10:02:28 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/31 01:16:21 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_color	checker(t_checker *checker, t_hit_record *rec)
 {
-	int		ret[3];
+	int	ret[3];
 
 	ret[0] = (int)floor(rec->u * rec->img_width * checker->scale);
 	ret[1] = (int)floor(rec->v * rec->img_height * checker->scale);

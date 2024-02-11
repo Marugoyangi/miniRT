@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:17:56 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/26 09:15:24 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/31 01:20:57 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ void	ft_error(char *str)
 
 int	ft_close(t_minirt *minirt, char *error, int flag)
 {
-	if (minirt->mlx && minirt->img && minirt->img->img_ptr)
-		mlx_destroy_image(minirt->mlx, minirt->img->img_ptr);
-	if (minirt->mlx && minirt->win)
-		mlx_destroy_window(minirt->mlx, minirt->win);
+	// if (minirt->mlx && minirt->img && minirt->img->img_ptr)
+	// 	mlx_destroy_image(minirt->mlx, (void *)minirt->img->img_ptr);
+	// if (minirt->mlx && minirt->win)
+	// 	mlx_destroy_window(minirt->mlx, minirt->win);
 	if (minirt->img)
 		free(minirt->img);
 	if (error && flag == 1)

@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 08:04:31 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/23 23:07:13 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/12 03:01:18 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ t_bvh	*bvh_node(t_object **objects, int start, int end)
 	sort_bvh(tmp, start, end, comparator);
 	ret[0] = bvh_node(tmp, 0, (end - start) / 2);
 	ret[1] = bvh_node(tmp, (end - start) / 2, end - start);
+	free(tmp);
 	return (create_inner_node(ret[0], ret[1]));
 }
 
@@ -71,7 +72,13 @@ int	bvh_hit(t_bvh *node, t_ray *ray, t_interval *closest, t_hit_record *rec)
 	if (!aabb_hit(node->bbox, ray, ray->t))
 		return (0);
 	if (node->is_leaf)
+	{
+		if (node->object->volume.density)
+			return (hit_volume(node->object, ray, closest, rec));
+		if (node->object->transform.is_transformed)
+			return (hit_transformed(node->object, ray, closest, rec));
 		return (hit_object(node->object, ray, closest, rec));
+	}
 	left_hit = bvh_hit(node->left, ray, closest, rec);
 	if (left_hit)
 	{

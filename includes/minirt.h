@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:24:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/26 11:26:45 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/12 06:43:25 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,17 +75,31 @@ typedef struct s_minirt
 # define QUAD		2
 # define CYLINDER	3
 # define CONE		4
+# define BOX		5
 
 //material type
 # define LAMBERTIAN	1
 # define METAL		2
 # define DIELECTRIC	3
+# define DIFFUSE	4
+# define PHASE		5
 
 //texture type
 # define SOLID		1
 # define CHECKER	2
 # define IMAGE		3
 # define NOISE		4
+
+//key
+# define ESC		53
+# define ARROW_U	126
+# define ARROW_D	125
+# define ARROW_L	123
+# define ARROW_R	124
+# define SPACE		49
+# define PLUS		24
+# define MINUS		27
+
 
 //utils
 int				ft_close(t_minirt *minirt, char *error, int flag);
@@ -144,7 +158,7 @@ t_vec			refract(t_vec vec, t_vec normal, double ratio, double cos_theta);
 double			reflectance(double cosine, double ratio);
 
 //camera
-void			set_camera(t_minirt *minirt, int fov, t_vec cam[3],\
+void			set_camera(t_minirt *minirt, int fov, t_vec cam[],\
 				double dof);
 t_ray			get_ray(t_minirt *minirt, double u, double v);
 
@@ -158,9 +172,6 @@ void			object_add_back(t_minirt *minirt, t_object *new);
 int				hit_object(t_object *object, t_ray *ray, t_interval *closest, \
 				t_hit_record *rec);
 
-//object_utisl
-t_object		*object_copy(t_object **object, int idx);
-
 //material
 t_material		material(int type, t_vec albedo, double fuzz, double ref_idx);
 int				metal_scatter(t_ray *_ray, t_hit_record *rec, \
@@ -169,6 +180,8 @@ int				lambertian_scatter(t_ray *_ray, t_hit_record *rec, t_color *attenuation, 
 				t_ray *scattered);
 int				dielectric_scatter(t_ray *_ray, t_hit_record *rec, \
 				t_color *attenuation, t_ray *scattered);
+int				phase_scatter(t_ray *_ray, t_hit_record *rec, t_color *attenuation, \
+				t_ray *scattered);
 
 //sphere
 t_sphere		*sphere(t_point center, double radius, t_material material, \
@@ -180,6 +193,10 @@ int				hit_sphere(t_ray *ray, t_sphere *sphere, double t, \
 t_quad			*quad(t_point q, t_vec u, t_vec v, t_material material);
 int				hit_quad(t_ray *ray, t_quad *quad, double t, \
 							t_hit_record *rec);
+
+//box
+t_box			*box(t_point min, t_point max, t_material material);
+int				hit_box(t_object *object, t_ray *ray, t_interval *closest, t_hit_record *rec);
 
 //diffuse
 t_vec			random_on_hemisphere(t_vec normal);
@@ -224,9 +241,8 @@ void			bvh_search(t_object *root, t_ray *r, t_interval *closes, \
 //texture
 t_color	checker(t_checker *checker, t_hit_record *rec);
 
-
 //image
-t_color	image_color(t_texture *texture, t_image *image, t_hit_record *rec);
+t_color	image_color(t_image *image, t_hit_record *rec);
 t_image	*image_init(void *mlx, char *path);
 t_color	image_normal(t_minirt *minirt, t_hit_record *rec);
 
@@ -234,5 +250,25 @@ t_color	image_normal(t_minirt *minirt, t_hit_record *rec);
 void	perlin_generate(t_perlin *perlin, double scale);
 double	noise(t_perlin *perlin, t_point p);
 double	noise_turb(t_perlin *perlin, t_point p);
+
+//transform
+void			transform(t_object *obj, t_vec rotation, t_vec translation, t_vec scale);
+void			transform_aabb(t_aabb *bbox, t_matrix m);
+t_matrix			matrix_inverse(t_matrix m);
+t_quaternion	quaternion(double x, double y, double z, double w);
+t_matrix		matrix_new(void);
+t_matrix	matrix_translate(t_vec translation);
+t_matrix	matrix_scale(t_vec scale);
+t_vec			matrix_apply(t_matrix m, t_vec vec, int w);
+t_matrix	matrix_mul(t_matrix a, t_matrix b);
+int				hit_transformed(t_object *obj, t_ray *ray, t_interval *closest, t_hit_record *rec);
+
+//volume
+int	hit_volume(t_object *object, t_ray *ray, t_interval *closest, t_hit_record *rec);
+t_ray	ray_transform(t_ray *ray, t_matrix inverse);
+
+//control
+int		key_input(int key, t_minirt *minirt);
+void	set_camera_basis(t_minirt *minirt);
 
 #endif

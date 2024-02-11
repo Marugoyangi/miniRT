@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 01:21:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/26 06:09:01 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/27 02:32:46 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ double	noise_turb (t_perlin *perlin, t_point p)
 	int		i;
 
 	i = 0;
-	tmp = vec_mul_const(p, perlin->scale);
+	tmp = p;
 	accum = 0.0;
 	weight = 1.0;
 	while (i < 7)

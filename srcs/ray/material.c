@@ -6,11 +6,22 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 06:58:27 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/26 09:54:12 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/12 07:36:12 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+int	phase_scatter(t_ray *_ray, t_hit_record *rec, t_color *attenuation, \
+				t_ray *scattered)
+{
+	t_vec	random;
+
+	random = random_on_hemisphere(rec->normal);
+	*scattered = ray(rec->p, random, _ray->time);
+	*attenuation = rec->material.albedo;
+	return (1);
+}
 
 int	dielectric_scatter(t_ray *_ray, t_hit_record *rec, t_color *attenuation, \
 				t_ray *scattered)
@@ -43,6 +54,7 @@ int	lambertian_scatter(t_ray *_ray, t_hit_record *rec, t_color *attenuation, \
 {
 	t_vec		scattered_direction;
 	t_vec		random_vec;
+	t_vec		tmp;
 
 	random_vec = random_in_sphere();
 	random_vec = vec_unit(random_vec);
@@ -53,11 +65,20 @@ int	lambertian_scatter(t_ray *_ray, t_hit_record *rec, t_color *attenuation, \
 	if (rec->material.texture.type == CHECKER)
 		*attenuation = checker(&rec->material.texture.checker, rec);
 	else if (rec->material.texture.type == IMAGE)
-		*attenuation = image_color(&rec->material.texture, rec->material.texture.image, rec);
+	{
+		*attenuation = image_color(rec->material.texture.image, rec);
+		if (rec->material.texture.is_bumped)
+		{
+			scattered_direction = image_color(rec->material.texture.normal_map, rec);
+			scattered_direction = vec_add(random_vec, scattered_direction);
+			*scattered = ray(rec->p, vec_unit(scattered_direction), _ray->time);
+		}
+	}
 	else if (rec->material.texture.type == NOISE)
-		*attenuation = vec_mul_const(vec(1, 1, 1), \
-		0.5 * (1 + sin(rec->material.texture.perlin.scale * rec->p.z \
-		+ 10 * noise_turb(&rec->material.texture.perlin, rec->p))));
+	{
+		tmp = vec_mul_const(rec->p, rec->material.texture.perlin.scale);
+		*attenuation = vec_mul_const(color(0.5, 0.5, 0.5), 1 + sin(tmp.y + 10 * noise_turb(&rec->material.texture.perlin, tmp)));
+	}
 	else
 		*attenuation = rec->material.albedo;
 	return (1);
@@ -90,5 +111,9 @@ t_material	material(int type, t_color albedo, double fuzz, double ref_idx)
 	else
 		material.fuzz = fuzz;
 	material.ref_idx = ref_idx;
+	if (type == DIFFUSE)
+		material.emitted = albedo;
+	else
+		material.emitted = color(0, 0, 0);
 	return (material);
 }

@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 22:13:43 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/26 07:16:36 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/08 03:44:29 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_material
 	double		fuzz;
 	double		ref_idx;
 	t_texture	texture;
+	t_color		emitted;
 }	t_material;
 
 typedef struct s_quad
@@ -70,12 +71,39 @@ typedef struct s_cone
 	t_aabb		bounding_box;
 }	t_cone;
 
+typedef struct s_box
+{
+	t_point		min;
+	t_point		max;
+	t_object	*list;
+	t_material	material;
+	t_aabb		bounding_box;
+}	t_box;
+
+typedef struct s_transform
+{
+	int			is_transformed;
+	t_vec		translation;
+	t_vec		rotation;
+	t_vec		scale;
+	t_matrix	matrix;
+	t_matrix	inverse;
+}	t_transform;
+
+typedef struct s_volume
+{
+	double		density;
+	t_color		color;
+}	t_volume;
+
 typedef struct s_object
 {
-	int				type;
-	t_aabb			bbox;
-	void			*element;
-	struct s_object	*next;
-}	t_object;
+	int					type;
+	t_aabb				bbox;
+	void				*element;
+	struct s_object		*next;
+	struct s_transform	transform;
+	struct s_volume		volume;
+}				t_object;
 
 #endif

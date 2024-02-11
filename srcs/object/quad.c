@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 06:23:33 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/26 10:24:15 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/07 21:24:43 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,12 @@ int	hit_quad(t_ray *ray, t_quad *quad, double max, t_hit_record *rec)
 	double	beta;
 
 	tmp = vec_dot(quad->normal, ray->direction);
-	if (fabs(tmp) < 0.0001)
+	if (fabs(tmp) < 0.001)
 		return (0);
 	tmp = (quad->d - vec_dot(quad->normal, ray->origin)) / tmp;
 	if (tmp > max)
+		return (0);
+	if (tmp < ray->t.min)
 		return (0);
 	rec->p = ray_at(ray, tmp);
 	hit_point = vec_sub(rec->p, quad->q);

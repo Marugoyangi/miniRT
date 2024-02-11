@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 06:26:05 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/23 17:06:22 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/07 23:22:39 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_vec	reflect(t_vec vec, t_vec normal)
 {
 	t_vec	ret;
 
-	ret = vec_sub(vec, vec_mul_const(normal, 2.0 * vec_dot(vec, normal)));
+	ret = vec_sub(vec, vec_mul_const(normal, 2 * vec_dot(vec, normal)));
 	return (ret);
 }
 
@@ -53,6 +53,10 @@ int	scatter(t_ray *_ray, t_hit_record *rec, t_ray *scattered)
 	else if (rec->material.type == DIELECTRIC)
 		return (dielectric_scatter(_ray, rec, &rec->material.albedo, \
 		scattered));
+	else if (rec->material.type == DIFFUSE)
+		return (0);
+	else if (rec->material.type == PHASE)
+		return (phase_scatter(_ray, rec, &rec->material.albedo, scattered));
 	else
 		return (1);
 }

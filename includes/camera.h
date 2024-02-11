@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 03:40:48 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/26 08:54:10 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/27 01:13:13 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,6 @@ typedef struct s_camera
 	t_vec		vertical_up;
 	t_basis		basis;
 	int			k;
+	t_color		background;
 }				t_camera;
 #endif

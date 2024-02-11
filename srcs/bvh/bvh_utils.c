@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 10:17:10 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/23 19:00:09 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/01/27 05:12:24 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,10 @@ t_object	**object_vector(t_object **object, int start, int end)
 	node = (t_object **)ft_malloc(sizeof(t_object *) * (end - start + 1));
 	while (i < end - start)
 	{
-		node[i] = object_copy(object, start + i);
+		node[i] = object[i + start];
 		i++;
 	}
 	node[i] = NULL;
-	i = 0;
-	while (i < end - start - 1)
-	{
-		node[i]->next = node[i + 1];
-		i++;
-	}
 	return (node);
 }
 

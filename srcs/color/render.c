@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:33:52 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/26 11:08:46 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/12 05:43:44 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,14 @@ void	print_color(void *thread)
 	int				y;
 	t_color			pixel_color;
 	t_thread		*t;
+	int				i;
 
 	t = (t_thread *)thread;
 	y = t->minirt->img_height / THREAD_NUM * t->id;
 	while (y < t->minirt->img_height / THREAD_NUM * (t->id + 1))
 	{
 		x = 0;
-		if (t->id == 0)
+		if (t->id == 0 && t->minirt->camera.k == 1)
 		{
 			printf("\rRendering %.2f%%", (double)(y + 1) / \
 			(t->minirt->img_height / THREAD_NUM) * 100);
@@ -101,11 +102,16 @@ void	print_color(void *thread)
 		{
 			pixel_color = color(0, 0, 0);
 			anti_aliasing(t->minirt, x, y, &pixel_color);
-			set_pixel(t->minirt, x, y, set_color(pixel_color, \
-			t->minirt->camera.samples_per_pixel));
+			i = 0;
+			while (i < t->minirt->camera.k && x + i < t->minirt->img_width)
+			{
+				set_pixel(t->minirt, x + i, y, set_color(pixel_color, \
+				t->minirt->camera.samples_per_pixel));
+				i++;
+			}
 			x += t->minirt->camera.k;
 		}
-		y += t->minirt->camera.k;
+		y += 1;
 	}
 	pthread_exit(0);
 }
