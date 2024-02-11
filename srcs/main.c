@@ -335,7 +335,7 @@ void	final_scene(t_minirt *minirt)
 	((t_sphere *)earth->element)->material.texture.type = IMAGE;
 	((t_sphere *)earth->element)->material.texture.is_bumped = 1;
 	((t_sphere *)earth->element)->material.texture.image = image_init(minirt->mlx, "./img/earthmap.xpm");
-	((t_sphere *)earth->element)->material.texture.normal_map = image_init(minirt->mlx, "./img/earth_normal.xpm");
+	((t_sphere *)earth->element)->material.texture.normal_map = image_init(minirt->mlx, "./img/earthmap_normal.xpm");
 	object_add_back(minirt, earth);
 	t_object *perlin_sphere = object(SPHERE, sphere(vec(220, 280, 300), 80, material(LAMBERTIAN, color(0.2, 0.4, 0.9), 0, 0), vec(0, 0, 0)));
 	((t_sphere *)perlin_sphere->element)->material.texture.type = NOISE;
