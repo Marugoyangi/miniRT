@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: seungwok <seungwok@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/26 19:04:30 by jeongbpa          #+#    #+#              #
-#    Updated: 2024/02/12 04:53:49 by jeongbpa         ###   ########.fr        #
+#    Updated: 2024/02/19 20:22:05 by seungwok         ###   ########seoul.kr   #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,9 @@ SRCS =	$(addprefix $(SRC_DIR), main.c\
 								bvh/bvh.c bvh/bvh_utils.c bvh/bvh_compare.c \
 								bvh/interval.c bvh/aabb.c bvh/aabb_utils.c \
 								texture/checker.c texture/image.c texture/perlin.c\
-								control/key.c)
+								control/key.c\
+								gnl/get_next_line.c
+								)
 OBJS = $(SRCS:.c=.o)
 
 BONUS_SRCS = 
@@ -41,6 +43,7 @@ CFLAGS = -Wall -Wextra -Werror -I./mlx -I./includes/ -O3 -g3
 
 CC = cc
 NAME = minirt
+LIBFT = ./libft/libft.a
 LIBMLX = ./mlx/libmlx.a
 
 ifeq ($(BONUS_FLAG), 42)
@@ -56,12 +59,15 @@ endif
 %.o: %.c $(OBJ_HEADER)
 	 $(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
 
-$(NAME): $(OBJ_FLAG) $(LIBMLX)
+$(NAME): $(OBJ_FLAG) $(LIBMLX) $(LIBFT)
 	@rm -f $(OBJ_EXCEPT)
 	$(CC) $^ -O3 -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 	
 $(LIBMLX):
 	@make -C mlx
+
+$(LIBFT):
+	@make -C libft
 
 all: $(NAME)
 
@@ -73,6 +79,7 @@ re: fclean all
 clean:
 	rm -f $(OBJS) $(BONUS_OBJS)
 	@$(MAKE) -C mlx clean
+	@$(MAKE) -C ./libft fclean
 
 fclean: clean
 	rm -f $(NAME)

@@ -6,7 +6,7 @@
 /*   By: seungwok <seungwok@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:25:06 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/19 19:40:22 by seungwok         ###   ########seoul.kr  */
+/*   Updated: 2024/02/19 20:21:12 by seungwok         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -439,10 +439,8 @@ void	write_pixel(int fd, t_minirt *minirt)
 	int				i;
 	int				j;
 	unsigned int	color;
-	t_data			*data;
 
 	j = minirt->img_height - 1;
-	data = &(engine->data);
 	while (j > -1)
 	{
 		i = 0;
@@ -453,7 +451,7 @@ void	write_pixel(int fd, t_minirt *minirt)
 			if (write(fd, &color, 4) == -1)
 			{
 				close(fd);
-				error_handler("bmp 파일 픽셀 데이터 쓰기 실패", engine);
+				"bmp 파일 픽셀 데이터 쓰기 실패";
 			}
 			i++;
 		}
@@ -488,7 +486,7 @@ void	parsing_rt(char *filename, t_minirt *minirt)
 		"파일 이름 오류";
 	free(tmp);
 	fd = open(filename, O_RDONLY);
-	get_next_line 사용하여 rt파일 읽을예정.
+	get_next_line(fd);
 	
 
 }
@@ -504,20 +502,6 @@ int	main(int argc, char **argv)
 		exit(1);		// 차 후 에러함수 사용하여 한 줄로 축약가능
 	}
 	parsing_rt(argv[1], &minirt);
-
-	// 메모리에 이미지 찍은 뒤 후처리
-	if (argc == 2)
-	{
-		mlx_new_window()
-		mlx_put_image_to_window();
-		hook & loop;
-	}		
-	else if (argc == 3 && !ft_strcmp(argv[2], "--save"))
-		make_bmp(&minirt);
-	else
-		"3번째 인자 오류";
-	return (0);
-		
 
 	if (argc == 2 && argv)
 	{
@@ -565,5 +549,17 @@ int	main(int argc, char **argv)
 	}
 	else
 		printf("Input the test number between 1 and 9 \nex) ./minirt 8\n");
+
+	// 메모리에 이미지 찍은 뒤 후처리
+	if (argc == 2)
+	{
+		mlx_new_window()
+		mlx_put_image_to_window();
+		hook & loop;
+	}		
+	else if (argc == 3 && !ft_strcmp(argv[2], "--save"))
+		make_bmp(&minirt);
+	else
+		"3번째 인자 오류";
 	return (0);
 }
