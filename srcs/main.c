@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungwok <seungwok@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:25:06 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/12 07:29:34 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/19 19:40:22 by seungwok         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -375,9 +375,149 @@ void	bump_test(t_minirt *minirt)
 }
 
 #include <time.h> //delete
+
+//////* c 에서의 bmp 파일 생성 과정 *//////
+// 	파일 헤더와 이미지 데이터로 구성된다.
+// 1. BMP 파일 헤더 작성
+// 	파일 헤더는 파일 형식, 이미지 크기, 색 정보 등을 포함한다.
+// 2. 이미지 데이터 작성
+// 	이미지 데이터는 각 픽셀의 색 정보를 저장한다.
+// 3. 파일을 닫아 저장한다.
+
+// BMP 파일 헤더 구조체
+typedef struct s_bmpheader {
+	uint16_t	type;		// 파일의 형식, char[2] 형식으로 선언후 "BM" 넣어도 무방하다.
+	uint32_t	size;		// 파일의 크기
+	uint16_t	reserved1;	// 예약된 2바이트 값, 대게 0으로 설정하며 아마도 미래버전의 bmp를 위한 멤버로 보인다.
+	uint16_t	reserved2;	// 예약된 2바이트 값
+	uint32_t	offbits	// 이미지 데이터가 시작되는 위치, 대게 이미지와 헤더 구조체크기의 합이 54인지라 54로 고정적이다.
+}	t_bmfileheader;
+
+// 이미지 데이터 구조체
+typedef struct s_bmpimg {
+	uint32_t	size;			// infoheader 구조체 크기
+	int32_t		width;			// 이미지 너비
+	int32_t		height;			// 이미지 높이
+	uint16_t	planes;			// 이미지 평면 수
+	uint16_t	bitcount;		// 픽셀당 비트 수
+	uint32_t	compression;	// 압축 방식, 0은 압축 없음
+	uint32_t	size_img;		// 이미지 데이터 크기
+	int32_t		xpm;			// 수평 해상도, 미터당 픽셀수를 의미하며 0으로 설정하면 해상도 정보가 없음을 나타낸다.
+	int32_t		ypm;			// 수직 해상도
+	uint32_t	clrused;		// 사용되는 색상 수, 0은 모든 색상 사용
+	uint32_t	clrimportant;	// 중요한 색상 수, 0은 모든 색상 중요
+
+}	t_bminfoheader;
+
+void	write_bmp(int fd, int filesize, t_minirt *minirt)
+{
+	t_bmfileheader		file;
+	t_bminfoheader		info;
+
+	file.type = 0x4D42;		//"BM"
+	file.size = filesize;
+	file.reserved1 = 0;
+	file.reserved2 = 0;
+	file.offbits = 54;
+	info.size = 40;
+	info.width = minirt->img_width;
+	info.height = minirt->img_height;
+	info.planes = 1;
+	info.bitcount = 32;
+	info.compression = 0;
+	info.size_img = filesize - 54;
+	info.xpm = 0;
+	info.ypm = 0;
+	info.clrused = 0;
+	info.clrimportant = 0;
+	write(fd, &file, sizeof(file));
+	write(fd, &info, sizeof(info));
+}
+
+void	write_pixel(int fd, t_minirt *minirt)
+{
+	int				i;
+	int				j;
+	unsigned int	color;
+	t_data			*data;
+
+	j = minirt->img_height - 1;
+	data = &(engine->data);
+	while (j > -1)
+	{
+		i = 0;
+		while (i < minirt->img_width)
+		{
+			color = *(unsigned int*)(((t_image*)(data->img_lst->content))->
+			address + (j * data->line_length + i * (data->bits_per_pixel / 8)));
+			if (write(fd, &color, 4) == -1)
+			{
+				close(fd);
+				error_handler("bmp 파일 픽셀 데이터 쓰기 실패", engine);
+			}
+			i++;
+		}
+		j--;
+	}
+}
+
+void	make_bmp(t_minirt *minirt)
+{
+	int	filesize;
+	int fd;
+
+	filesize = 54 + (minirt->img_width * minirt->img_height) * 4;
+	// *4 : 픽셀당 4바이트, +54 : 구조체 크기
+	fd = open("minirt.bmp", O_CREAT | O_RDWR | O_TRUNC, 0666);
+	write_bmp(fd, filesize, minirt);
+	write_pixel(fd, minirt);	// fd에 메모리 내용대로 비트맵찍을 함수
+	close(fd);
+}
+
+void	parsing_rt(char *filename, t_minirt *minirt)
+{
+	char	**tmp;
+	int		fd;
+
+	tmp = ft_split(filename, '.');
+	if (tmp[2])
+		"파일 이름 형식 오류";
+	else if (ft_strcmp(tmp[1], "rt"))
+		"확장자 오류";
+	else if (ft_strcmp(tmp[0], ""))
+		"파일 이름 오류";
+	free(tmp);
+	fd = open(filename, O_RDONLY);
+	get_next_line 사용하여 rt파일 읽을예정.
+	
+
+}
+
+
 int	main(int argc, char **argv)
 {
 	t_minirt	minirt;
+	// parsing 추가
+	if (argc > 3 || argc < 2)
+	{
+		"오류메시지 출력";
+		exit(1);		// 차 후 에러함수 사용하여 한 줄로 축약가능
+	}
+	parsing_rt(argv[1], &minirt);
+
+	// 메모리에 이미지 찍은 뒤 후처리
+	if (argc == 2)
+	{
+		mlx_new_window()
+		mlx_put_image_to_window();
+		hook & loop;
+	}		
+	else if (argc == 3 && !ft_strcmp(argv[2], "--save"))
+		make_bmp(&minirt);
+	else
+		"3번째 인자 오류";
+	return (0);
+		
 
 	if (argc == 2 && argv)
 	{
