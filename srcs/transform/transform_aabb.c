@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 15:55:58 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/07 20:20:16 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/26 20:20:04 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ void	transform_aabb(t_aabb *bbox, t_matrix m)
 		corners[i] = matrix_apply(m, corners[i], 1);
 		i++;
 	}
-	i = 0;
+	i = -1;
 	new_bbox.x = interval(+INFINITY, -INFINITY);
 	new_bbox.y = interval(+INFINITY, -INFINITY);
 	new_bbox.z = interval(+INFINITY, -INFINITY);
-	while (i < 8)
+	while (++i < 8)
 	{
 		new_bbox.x.min = fmin(new_bbox.x.min, corners[i].x);
 		new_bbox.y.min = fmin(new_bbox.y.min, corners[i].y);
@@ -49,8 +49,6 @@ void	transform_aabb(t_aabb *bbox, t_matrix m)
 		new_bbox.x.max = fmax(new_bbox.x.max, corners[i].x);
 		new_bbox.y.max = fmax(new_bbox.y.max, corners[i].y);
 		new_bbox.z.max = fmax(new_bbox.z.max, corners[i].z);
-		i++;
 	}
 	*bbox = new_bbox;
 }
-

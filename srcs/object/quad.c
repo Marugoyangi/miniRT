@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 06:23:33 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/07 21:24:43 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/19 21:48:08 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	is_interior(t_hit_record *rec, double alpha, double beta)
 	return (1);
 }
 
-int	hit_quad(t_ray *ray, t_quad *quad, double max, t_hit_record *rec)
+int	hit_quad(t_ray *ray, t_quad *quad, t_interval interval, t_hit_record *rec)
 {
 	double	tmp;
 	t_vec	hit_point;
@@ -29,20 +29,18 @@ int	hit_quad(t_ray *ray, t_quad *quad, double max, t_hit_record *rec)
 	double	beta;
 
 	tmp = vec_dot(quad->normal, ray->direction);
-	if (fabs(tmp) < 0.001)
+	if (fabs(tmp) < 0.000001)
 		return (0);
 	tmp = (quad->d - vec_dot(quad->normal, ray->origin)) / tmp;
-	if (tmp > max)
+	if (tmp > interval.max || tmp < interval.min)
 		return (0);
-	if (tmp < ray->t.min)
-		return (0);
-	rec->p = ray_at(ray, tmp);
-	hit_point = vec_sub(rec->p, quad->q);
+	hit_point = vec_sub(ray_at(ray, tmp), quad->q);
 	alpha = vec_dot(quad->w, vec_cross(hit_point, quad->v));
 	beta = vec_dot(quad->w, vec_cross(quad->u, hit_point));
 	if (!is_interior(rec, alpha, beta))
 		return (0);
 	rec->t = tmp;
+	rec->p = ray_at(ray, tmp);
 	rec->material = quad->material;
 	set_face_normal(ray, quad->normal, rec);
 	return (1);
@@ -64,5 +62,6 @@ t_quad	*quad(t_point _q, t_vec u, t_vec v, t_material material)
 	ret->normal = vec_unit(tmp);
 	ret->d = vec_dot(ret->normal, _q);
 	ret->w = vec_div_const(tmp, vec_dot(tmp, tmp));
+	ret->area = vec_length(tmp);
 	return (ret);
 }

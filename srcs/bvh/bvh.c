@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 08:04:31 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/12 03:01:18 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/26 18:38:50 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,10 @@ t_bvh	*bvh_node(t_object **objects, int start, int end)
 	else
 		comparator = &box_compare_z;
 	if (end - start == 1)
+	{
+		free(tmp);
 		return (create_leaf(tmp[0]));
+	}
 	sort_bvh(tmp, start, end, comparator);
 	ret[0] = bvh_node(tmp, 0, (end - start) / 2);
 	ret[1] = bvh_node(tmp, (end - start) / 2, end - start);
@@ -82,7 +85,7 @@ int	bvh_hit(t_bvh *node, t_ray *ray, t_interval *closest, t_hit_record *rec)
 	left_hit = bvh_hit(node->left, ray, closest, rec);
 	if (left_hit)
 	{
-		closest->max = rec->t;
+		ray->t.max = rec->t;
 		right_hit = bvh_hit(node->right, ray, closest, rec);
 	}
 	else

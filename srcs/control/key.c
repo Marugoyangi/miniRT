@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 11:18:00 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/12 05:59:34 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/27 02:29:23 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	move_camera(int key, t_minirt *minirt)
 int	key_input(int key, t_minirt *minirt)
 {
 	if (key == ESC)
-		ft_close(minirt, NULL, 0);
+		free_all(minirt);
 	else if (minirt->camera.k == 1 && key == SPACE)
 		minirt->camera.k = 10;
 	else if (minirt->camera.k == 10 && key == SPACE)
@@ -40,14 +40,6 @@ int	key_input(int key, t_minirt *minirt)
 		multi_thread(minirt);
 		mlx_put_image_to_window(minirt->mlx, minirt->win, \
 		minirt->img->img_ptr, 0, 0);
-	}
-	else if (key == PLUS)
-		minirt->camera.samples_per_pixel += 10;
-	else if (key == MINUS)
-	{
-		minirt->camera.samples_per_pixel -= 10;
-		if (minirt->camera.samples_per_pixel < 1)
-			minirt->camera.samples_per_pixel = 1;
 	}
 	else if (minirt->camera.k == 10)
 	{

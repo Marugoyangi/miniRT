@@ -6,14 +6,14 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 19:40:22 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/26 07:42:57 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/26 18:54:32 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TEXTURE_H
 # define TEXTURE_H
 
-typedef struct s_data t_data;
+typedef struct s_data	t_data;
 
 typedef struct s_perlin
 {
@@ -31,14 +31,14 @@ typedef struct s_image
 	int			height;
 }				t_image;
 
-typedef struct	s_checker
+typedef struct s_checker
 {
 	double		scale;
 	t_color		color1;
 	t_color		color2;
 }				t_checker;
 
-typedef struct	s_texture
+typedef struct s_texture
 {
 	int			type;
 	t_checker	checker;

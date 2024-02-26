@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:02:15 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/05 00:40:15 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/26 18:54:57 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,13 @@ typedef struct s_matrix
 	double		m3[4];
 	double		m4[4];
 }				t_matrix;
+
+typedef struct s_onb
+{
+	t_vec		u;
+	t_vec		v;
+	t_vec		w;
+}				t_onb;
 
 typedef struct s_vec	t_color;
 typedef struct s_vec	t_point;

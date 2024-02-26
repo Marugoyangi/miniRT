@@ -6,50 +6,54 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 22:25:15 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/08 01:35:59 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/26 22:45:07 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	hit_object(t_object *object, t_ray *ray, t_interval *closest, t_hit_record *rec)
+int	hit_object(t_object *object, t_ray *ray, \
+			t_interval *closest, t_hit_record *rec)
 {
-	t_object		*tmp;
 	t_hit_record	tmp_rec;
 
-	tmp = object;
-	if (tmp == NULL)
-		return (0);
 	tmp_rec.img_height = rec->img_height;
 	tmp_rec.img_width = rec->img_width;
-	if (ray->t.max < closest->min)
-		return (0);
-	if (tmp->type == SPHERE && hit_sphere(ray, \
-		(t_sphere *)tmp->element, closest->max, &tmp_rec))
-	{
-		*rec = tmp_rec;
-		rec->hit_anything = 1;
-		rec->material = ((t_sphere *)tmp->element)->material;
-		closest->max = tmp_rec.t;
-	}
-	else if (tmp->type == QUAD && hit_quad(ray, \
-		(t_quad *)tmp->element, closest->max, &tmp_rec))
-	{
-		*rec = tmp_rec;
-		rec->hit_anything = 1;
-		rec->material = ((t_quad *)tmp->element)->material;
-		closest->max = tmp_rec.t;
-	}
-	else if (tmp->type == BOX && hit_box(tmp, ray, closest, &tmp_rec))
-	{
-		*rec = tmp_rec;
-		rec->hit_anything = 1;
-		rec->material = ((t_box *)tmp->element)->material;
-		closest->max = tmp_rec.t;
-	}
+	if (object->type == SPHERE && hit_sphere(ray, \
+		(t_sphere *)object->element, *closest, &tmp_rec))
+		tmp_rec.material = ((t_sphere *)object->element)->material;
+	else if (object->type == QUAD && hit_quad(ray, \
+		(t_quad *)object->element, *closest, &tmp_rec))
+		tmp_rec.material = ((t_quad *)object->element)->material;
+	else if (object->type == BOX && hit_box(object, ray, closest, &tmp_rec))
+		tmp_rec.material = ((t_box *)object->element)->material;
+	else if (object->type == CYLINDER && hit_cylinder(ray, \
+		(t_cylinder *)object->element, *closest, &tmp_rec))
+		tmp_rec.material = ((t_cylinder *)object->element)->material;
+	else if (object->type == HYPOBOLOID && hit_hypoboloid(ray, \
+		(t_hypoboloid *)object->element, *closest, &tmp_rec))
+		tmp_rec.material = ((t_hypoboloid *)object->element)->material;
 	else
 		return (0);
+	*rec = tmp_rec;
+	rec->hit_anything = 1;
+	closest->max = rec->t;
+	rec->object = object;
 	return (rec->hit_anything);
+}
+
+void	object_set(t_object *object, int type, void *element)
+{
+	if (type == HYPOBOLOID)
+	{
+		object->element = (t_hypoboloid *)element;
+		object->bbox = ((t_hypoboloid *)element)->bounding_box;
+	}
+	else if (type == BOX)
+	{
+		object->element = (t_box *)element;
+		object->bbox = ((t_box *)element)->bounding_box;
+	}
 }
 
 t_object	*object(int type, void *element)
@@ -58,6 +62,9 @@ t_object	*object(int type, void *element)
 
 	object = (t_object *)ft_malloc(sizeof(t_object));
 	object->type = type;
+	object->next = NULL;
+	object->transform.is_transformed = 0;
+	object->volume.density = 0;
 	if (type == SPHERE)
 	{
 		object->element = (t_sphere *)element;
@@ -73,20 +80,24 @@ t_object	*object(int type, void *element)
 		object->element = (t_cylinder *)element;
 		object->bbox = ((t_cylinder *)element)->bounding_box;
 	}
-	else if (type == CONE)
-	{
-		object->element = (t_cone *)element;
-		object->bbox = ((t_cone *)element)->bounding_box;
-	}
-	else if (type == BOX)
-	{
-		object->element = (t_box *)element;
-		object->bbox = ((t_box *)element)->bounding_box;
-	}
-	object->next = NULL;
-	object->transform.is_transformed = 0;
-	object->volume.density = 0;
+	else
+		object_set(object, type, element);
 	return (object);
+}
+
+void	light_add_back(t_minirt *minirt, t_object *new)
+{
+	t_object	*last;
+
+	last = minirt->light;
+	if (!last)
+	{
+		minirt->light = new;
+		return ;
+	}
+	while (last->next)
+		last = last->next;
+	last->next = new;
 }
 
 void	object_add_back(t_minirt *minirt, t_object *new)
@@ -102,16 +113,4 @@ void	object_add_back(t_minirt *minirt, t_object *new)
 	while (last->next)
 		last = last->next;
 	last->next = new;
-}
-
-void	object_clear(t_object **objects)
-{
-	t_object	*tmp;
-
-	while (*objects)
-	{
-		tmp = (*objects)->next;
-		free(*objects);
-		*objects = tmp;
-	}
 }

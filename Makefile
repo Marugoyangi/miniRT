@@ -6,7 +6,7 @@
 #    By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/26 19:04:30 by jeongbpa          #+#    #+#              #
-#    Updated: 2024/02/12 04:53:49 by jeongbpa         ###   ########.fr        #
+#    Updated: 2024/02/27 03:11:13 by jeongbpa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,18 +14,21 @@ SRC_DIR = ./srcs/
 BONUS_DIR = ./bonus_srcs/
 
 SRCS =	$(addprefix $(SRC_DIR), main.c\
-								utils/utils.c utils/random.c\
+								utils/utils.c utils/random.c utils/rng.c utils/free.c\
 								vector/vector_ops.c vector/vector_cals.c vector/vector_const.c vector/vector_utils.c\
 								transform/transform.c transform/transform_aabb.c transform/matrix.c\
-								transform/hit_transformed.c\
-								ray/ray.c ray/scatter.c ray/volume.c ray/material.c\
+								transform/hit_transformed.c transform/matrix_inverse.c\
+								ray/ray.c ray/scatter.c ray/volume.c ray/material.c ray/pdf.c ray/pdf_object.c\
+								ray/pdf_mixture.c\
 								camera/camera.c camera/camera_utils.c\
 								color/color.c color/render.c color/diffuse.c\
-								object/object.c object/sphere.c object/quad.c object/box.c\
+								object/object.c object/sphere.c object/quad.c object/box.c object/cylinder.c\
+								object/hypoboloid.c\
 								bvh/bvh.c bvh/bvh_utils.c bvh/bvh_compare.c \
 								bvh/interval.c bvh/aabb.c bvh/aabb_utils.c \
-								texture/checker.c texture/image.c texture/perlin.c\
-								control/key.c)
+								texture/checker.c texture/image.c texture/perlin.c texture/perlin_utils.c\
+								control/key.c\
+								test.c)
 OBJS = $(SRCS:.c=.o)
 
 BONUS_SRCS = 
@@ -37,9 +40,9 @@ BONUS_OBJS = $(BONUS_SRCS:.c=.o)
 
 HEADER = minirt.h
 HEADER_BONUS = minirt_bonus.h
-CFLAGS = -Wall -Wextra -Werror -I./mlx -I./includes/ -O3 -g3
+CFLAGS = -I./mlx_linux -I./includes/ -O3 -Wall -Wextra -Werror
 
-CC = cc
+CC = gcc
 NAME = minirt
 LIBMLX = ./mlx/libmlx.a
 
@@ -61,7 +64,7 @@ $(NAME): $(OBJ_FLAG) $(LIBMLX)
 	$(CC) $^ -O3 -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 	
 $(LIBMLX):
-	@make -C mlx
+	make -C mlx
 
 all: $(NAME)
 

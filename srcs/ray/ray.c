@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 17:53:18 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/07 18:07:25 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/26 22:40:12 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,40 @@ t_vec	ray_at(t_ray *ray, double t)
 	return (ret);
 }
 
+void	ray_color_set(t_minirt *minirt, t_hit_record *rec, \
+					t_interval *closest, t_scatter_record *srec)
+
+{
+	rec->hit_anything = 0;
+	rec->img_width = minirt->img_width;
+	rec->img_height = minirt->img_height;
+	srec->is_specular = 0;
+	*closest = interval(0.001, INFINITY);
+}
+
 t_color	ray_color(t_bvh *node, t_ray *r, int depth, t_minirt *minirt)
 {
-	t_ray			tmp_ray;
-	t_hit_record	rec;
-	t_interval		closest;
+	t_ray				tmp_ray;
+	t_hit_record		rec;
+	t_interval			closest;
+	t_scatter_record	srec;
 
 	if (depth <= 0)
 		return (color(0, 0, 0));
-	rec.hit_anything = 0;
-	rec.img_width = minirt->img_width;
-	rec.img_height = minirt->img_height;
-	closest = r->t;
+	ray_color_set(minirt, &rec, &closest, &srec);
 	bvh_hit(node, r, &closest, &rec);
-	if (rec.hit_anything)
-	{
-		if (scatter(r, &rec, &tmp_ray))
-			return (vec_add(vec_mul(ray_color(node, &tmp_ray, depth - 1, minirt), \
-			rec.material.albedo), rec.material.emitted));
+	if (!rec.hit_anything)
+		return (minirt->camera.background);
+	if (!scatter(r, &rec, &tmp_ray, &srec))
 		return (rec.material.emitted);
-	}
-	return (minirt->camera.background);
+	if (srec.is_specular == 1)
+		return (vec_mul(ray_color(node, &srec.specular_ray, depth - 1, minirt), \
+		srec.attenuation));
+	srec.pdf[0] = pdf_cosine(r, &rec, &tmp_ray, NULL);
+	srec.pdf[1] = pdf_mix_light(minirt->light, &rec, &tmp_ray, NULL);
+	srec.pdf[0] = pdf_mixture(srec.pdf[0], srec.pdf[1], &tmp_ray, &rec);
+	srec.pdf[1].value = scatter_pdf(&rec, &tmp_ray);
+	return (vec_add(vec_mul(ray_color(node, &tmp_ray, depth - 1, minirt), \
+		vec_mul_const(rec.material.albedo, srec.pdf[1].value / \
+		srec.pdf[0].value)), rec.material.emitted));
 }

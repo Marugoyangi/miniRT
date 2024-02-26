@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 01:21:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/27 02:32:46 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/26 20:33:35 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,33 +103,12 @@ double	noise(t_perlin *perlin, t_point p)
 			j[2] = -1;
 			while (++j[2] < 2)
 			{
-				c[j[0]][j[1]][j[2]] = perlin->random_vec[\
+				c[j[0]][j[1]][j[2]] = perlin->random_vec[(\
 				perlin->perm_x[((int)(floor(p.x)) + j[0]) & 255] ^ \
 				perlin->perm_y[((int)(floor(p.y)) + j[1]) & 255] ^ \
-				perlin->perm_z[((int)(floor(p.z)) + j[2]) & 255]];
+				perlin->perm_z[((int)(floor(p.z)) + j[2]) & 255]) & 255];
 			}
 		}
 	}
 	return (trilinear_interp(c, i[0], i[1], i[2]));
-}
-
-double	noise_turb (t_perlin *perlin, t_point p)
-{
-	double	accum;
-	t_vec	tmp;
-	double	weight;
-	int		i;
-
-	i = 0;
-	tmp = p;
-	accum = 0.0;
-	weight = 1.0;
-	while (i < 7)
-	{
-		accum += weight * noise(perlin, tmp);
-		weight *= 0.5;
-		tmp = vec_mul_const(tmp, 2);
-		i++;
-	}
-	return (fabs(accum));
 }

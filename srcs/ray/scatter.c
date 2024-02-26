@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 06:26:05 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/07 23:22:39 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/26 21:33:56 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,22 +41,23 @@ t_vec	reflect(t_vec vec, t_vec normal)
 	return (ret);
 }
 
-int	scatter(t_ray *_ray, t_hit_record *rec, t_ray *scattered)
+int	scatter(t_ray *_ray, t_hit_record *rec, \
+			t_ray *scattered, t_scatter_record *srec)
 {
-	if (rec->material.type == 0)
-		return (0);
 	if (rec->material.type == METAL)
-		return (metal_scatter(_ray, rec, &rec->material.albedo, scattered));
+		return (metal_scatter(_ray, rec, srec));
 	else if (rec->material.type == LAMBERTIAN)
-		return (lambertian_scatter(_ray, rec, &rec->material.albedo, \
-		scattered));
+		return (lambertian_scatter(_ray, rec, scattered, srec));
 	else if (rec->material.type == DIELECTRIC)
-		return (dielectric_scatter(_ray, rec, &rec->material.albedo, \
-		scattered));
+		return (dielectric_scatter(_ray, rec, srec));
 	else if (rec->material.type == DIFFUSE)
+	{
+		if (!rec->front_face)
+			rec->material.emitted = color(0, 0, 0);
 		return (0);
+	}
 	else if (rec->material.type == PHASE)
-		return (phase_scatter(_ray, rec, &rec->material.albedo, scattered));
+		return (phase_scatter(_ray, rec, scattered, srec));
 	else
-		return (1);
+		return (0);
 }

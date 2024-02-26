@@ -6,11 +6,41 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 02:55:33 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/08 03:27:51 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/26 20:17:33 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+t_vec	random_to_sphere(double radius, double distance_squared)
+{
+	double	r1;
+	double	r2;
+	double	z;
+	double	phi;
+
+	r1 = random_double(0, 1);
+	r2 = random_double(0, 1);
+	z = 1 + r2 * (sqrt(1 - radius * radius / distance_squared) - 1);
+	phi = 2 * PI * r1;
+	return (vec(cos(phi) * sqrt(1 - z * z), sin(phi) * sqrt(1 - z * z), z));
+}
+
+t_vec	random_cosine_direction(void)
+{
+	double	r1;
+	double	r2;
+	double	xyz[3];
+	double	pi;
+
+	r1 = random_double(0, 1);
+	r2 = random_double(0, 1);
+	pi = 2 * M_PI * r1;
+	xyz[0] = cos(pi) * sqrt(r2);
+	xyz[1] = sin(pi) * sqrt(r2);
+	xyz[2] = sqrt(1 - r2);
+	return (vec(xyz[0], xyz[1], xyz[2]));
+}
 
 t_vec	random_vec(double min, double max)
 {
@@ -29,34 +59,4 @@ double	random_clamp(double x, double min, double max)
 	if (x > max)
 		return (max);
 	return (x);
-}
-
-unsigned int	xorshift32(unsigned int seed)
-{
-	seed = (seed ^ 61) ^ (seed >> 16);
-	seed *= 9;
-	seed = seed ^ (seed >> 4);
-	seed *= 0x27d4eb2d;
-	seed = seed ^ (seed >> 15);
-	return (seed);
-}
-
-float	random_from_memory(unsigned int *seed)
-{
-	*seed = xorshift32(*seed);
-	return ((float)*seed / (float)4294967296);
-}
-
-double	random_double(double min, double max)
-{
-	static unsigned int		seed = 0x12345678;
-	float					tmp;
-
-	tmp = random_from_memory(&seed);
-	return ((double)(min + (max - min) * tmp));
-}
-
-int	random_int(int min, int max)
-{
-	return ((int)random_double(min, max + 1));
 }

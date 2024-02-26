@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 16:28:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/12 03:39:34 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/26 20:32:47 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,15 @@ t_ray	ray_transform(t_ray *ray, t_matrix inverse)
 	return (ret);
 }
 
-int	hit_transformed(t_object *obj, t_ray *ray, t_interval *closest, t_hit_record *rec)
+int	hit_transformed(t_object *obj, t_ray *ray, t_interval *closest, \
+					t_hit_record *rec)
 {
 	t_ray			tmp_ray;
-	t_hit_record	tmp_rec;
 
 	tmp_ray = ray_transform(ray, obj->transform.inverse);
-	if (!hit_object(obj, &tmp_ray, closest, &tmp_rec))
+	if (!hit_object(obj, &tmp_ray, closest, rec))
 		return (0);
-	closest->max = tmp_rec.t;
-	*rec = tmp_rec;
+	closest->max = rec->t;
 	rec->p = matrix_apply(obj->transform.matrix, rec->p, 1);
 	rec->normal = matrix_apply(obj->transform.matrix, rec->normal, 0);
 	rec->normal = vec_unit(rec->normal);

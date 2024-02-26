@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:17:56 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/31 01:20:57 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/27 03:10:52 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	*ft_malloc(int size)
 	ptr = malloc(size);
 	if (ptr == NULL)
 	{
-		perror("minishell");
+		ft_error("malloc error\n");
 		exit(1);
 	}
 	return (ptr);
@@ -41,15 +41,8 @@ void	ft_error(char *str)
 	exit(1);
 }
 
-int	ft_close(t_minirt *minirt, char *error, int flag)
+int	ft_close(t_minirt *minirt)
 {
-	// if (minirt->mlx && minirt->img && minirt->img->img_ptr)
-	// 	mlx_destroy_image(minirt->mlx, (void *)minirt->img->img_ptr);
-	// if (minirt->mlx && minirt->win)
-	// 	mlx_destroy_window(minirt->mlx, minirt->win);
-	if (minirt->img)
-		free(minirt->img);
-	if (error && flag == 1)
-		ft_error(error);
-	exit(1);
+	free_all(minirt);
+	return (1);
 }

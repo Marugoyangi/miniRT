@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 22:13:43 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/08 03:44:29 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/26 13:29:10 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_quad
 	t_vec		normal;
 	t_vec		w;
 	double		d;
+	double		area;
 }	t_quad;
 
 typedef struct s_sphere
@@ -53,23 +54,21 @@ typedef struct s_sphere
 typedef struct s_cylinder
 {
 	t_point		center;
-	t_vec		normal;
 	double		diameter;
 	double		height;
-	t_color		color;
 	t_material	material;
 	t_aabb		bounding_box;
 }	t_cylinder;
 
-typedef struct s_cone
+typedef struct s_hypoboloid
 {
 	t_point		center;
-	t_vec		normal;
-	double		angle;
-	t_color		color;
+	double		diameter;
+	double		height;
+	double		k;
 	t_material	material;
 	t_aabb		bounding_box;
-}	t_cone;
+}	t_hypoboloid;
 
 typedef struct s_box
 {
@@ -105,5 +104,13 @@ typedef struct s_object
 	struct s_transform	transform;
 	struct s_volume		volume;
 }				t_object;
+
+typedef struct s_pdf
+{
+	t_object	*object;
+	t_point		origin;
+	double		value;
+	t_vec		generated;
+}	t_pdf;
 
 #endif

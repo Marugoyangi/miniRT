@@ -1,40 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   interval.h                                         :+:      :+:    :+:   */
+/*   perlin_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/19 08:07:34 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/26 18:52:53 by jeongbpa         ###   ########.fr       */
+/*   Created: 2024/02/26 20:33:42 by jeongbpa          #+#    #+#             */
+/*   Updated: 2024/02/26 20:33:47 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef INTERVAL_H
-# define INTERVAL_H
+#include "minirt.h"
 
-typedef struct s_object	t_object;
-
-typedef struct s_interval
+double	noise_turb(t_perlin *perlin, t_point p)
 {
-	double		min;
-	double		max;
-}				t_interval;
+	double	accum;
+	t_vec	tmp;
+	double	weight;
+	int		i;
 
-typedef struct s_aabb
-{
-	t_interval	x;
-	t_interval	y;
-	t_interval	z;
-}				t_aabb;
-
-typedef struct s_bvh
-{
-	t_aabb			bbox;
-	t_object		*object;
-	int				is_leaf;
-	struct s_bvh	*left;
-	struct s_bvh	*right;
-}				t_bvh;
-
-#endif
+	i = 0;
+	tmp = p;
+	accum = 0.0;
+	weight = 1.0;
+	while (i < 7)
+	{
+		accum += weight * noise(perlin, tmp);
+		weight *= 0.5;
+		tmp = vec_mul_const(tmp, 2);
+		i++;
+	}
+	return (fabs(accum));
+}

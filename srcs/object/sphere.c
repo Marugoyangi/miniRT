@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 17:39:06 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/27 02:25:37 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/26 22:37:51 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,42 +33,35 @@ void	hit_sphere_record(double c, t_sphere *sphere, t_hit_record *rec, \
 	outward_normal = vec_div_const(vec_sub(rec->p, sphere->center), \
 	sphere->radius);
 	set_face_normal(ray, outward_normal, rec);
-	if (sphere->material.texture.type == CHECKER)
-		get_sphere_uv(rec, outward_normal);
-	else
-		get_sphere_uv(rec, outward_normal);
+	get_sphere_uv(rec, outward_normal);
 }
 
-int	hit_sphere(t_ray *ray, t_sphere *sphere, double t, t_hit_record *rec)
+int	hit_sphere(t_ray *ray, t_sphere *sphere, t_interval t, t_hit_record *rec)
 {
 	t_vec	oc;
-	double	a;
-	double	half_b;
-	double	c;
+	double	abc[3];
 	double	discriminant;
 	t_point	center;
 
+	center = sphere->center;
 	if (sphere->is_moving)
 		center = vec_add(sphere->center, vec_mul_const (\
 		sphere->velocity, ray->time));
-	else
-		center = sphere->center;
 	oc = vec_sub(ray->origin, center);
-	a = vec_length_squared(ray->direction);
-	half_b = vec_dot(oc, ray->direction);
-	c = vec_length_squared(oc) - sphere->radius * sphere->radius;
-	discriminant = half_b * half_b - a * c;
-	if (discriminant < 0)
+	abc[0] = vec_length_squared(ray->direction);
+	abc[1] = vec_dot(oc, ray->direction);
+	abc[2] = vec_length_squared(oc) - sphere->radius * sphere->radius;
+	discriminant = abc[1] * abc[1] - abc[0] * abc[2];
+	if (discriminant < 0 || discriminant < 0.000001)
 		return (0);
-	discriminant = sqrt(discriminant);
-	c = (-half_b - discriminant) / a;
-	if (c <= ray->t.min || c >= t)
+	abc[2] = (-abc[1] - sqrt(discriminant)) / abc[0];
+	if (abc[2] <= t.min || abc[2] >= t.max)
 	{
-		c = (-half_b + discriminant) / a;
-		if (c <= ray->t.min || c >= t)
+		abc[2] = (-abc[1] + sqrt(discriminant)) / abc[0];
+		if (abc[2] <= t.min || abc[2] >= t.max)
 			return (0);
 	}
-	hit_sphere_record(c, sphere, rec, ray);
+	hit_sphere_record(abc[2], sphere, rec, ray);
 	return (1);
 }
 

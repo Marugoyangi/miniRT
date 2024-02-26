@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:50:28 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/26 10:30:16 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/21 18:17:57 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ unsigned int	set_color(t_color c, int samples_per_pixel)
 	t_color	tmp;
 
 	scale = 1.0 / samples_per_pixel;
+	if (isnan(c.x))
+		c.x = 0;
+	if (isnan(c.y))
+		c.y = 0;
+	if (isnan(c.z))
+		c.z = 0;
 	tmp = vec_mul_const(c, scale);
 	tmp = color(sqrt(tmp.x), sqrt(tmp.y), sqrt(tmp.z));
 	rgb[0] = (int)(256 * random_clamp(tmp.x, 0, 0.999));

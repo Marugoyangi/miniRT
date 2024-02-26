@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:33:52 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/12 05:43:44 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/27 02:31:56 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,29 +41,36 @@ void	set_pixel(t_minirt *minirt, int x, int y, unsigned int color)
 
 void	anti_aliasing(t_minirt *minirt, int x, int y, t_color *pixel_color)
 {
-	int				i;
+	int				i[2];
 	t_ray			tmp;
+	int				sqrt_spp;
 
-	i = 0;
-	while (i < minirt->camera.samples_per_pixel)
+	i[0] = 0;
+	sqrt_spp = sqrt(minirt->camera.samples_per_pixel);
+	while (i[0] < sqrt_spp)
 	{
-		tmp = get_ray(minirt, \
-		((x + random_double(-0.5, 0.5)) / (minirt->img_width - 1)), \
-		((y + random_double(-0.5, 0.5)) / (minirt->img_height - 1)));
-		*pixel_color = vec_add(*pixel_color, ray_color(minirt->bvh, &tmp, \
-		minirt->camera.max_depth, minirt));
-		i++;
+		i[1] = 0;
+		while (i[1] < sqrt_spp)
+		{
+			tmp = get_ray(minirt, \
+			(double)(x + (i[1] + random_double(-0.5, 0.5)) / sqrt_spp) / \
+			minirt->img_width, \
+			(double)(y + (i[0] + random_double(-0.5, 0.5)) / sqrt_spp) / \
+			minirt->img_height);
+			*pixel_color = vec_add(*pixel_color, ray_color(minirt->bvh, &tmp, \
+			minirt->camera.max_depth, minirt));
+			i[1]++;
+		}
+		i[0]++;
 	}
 }
 
-#include <pthread.h>
-#define THREAD_NUM 8
-void multi_thread(t_minirt *minirt)
+void	multi_thread(t_minirt *minirt)
 {
 	int			i;
 
 	i = 0;
-	while (i < THREAD_NUM)
+	while (i < THREAD_MAX)
 	{
 		minirt->thread_data[i].id = i;
 		minirt->thread_data[i].minirt = minirt;
@@ -72,7 +79,7 @@ void multi_thread(t_minirt *minirt)
 		i++;
 	}
 	i = 0;
-	while (i < THREAD_NUM)
+	while (i < THREAD_MAX)
 	{
 		pthread_join(*(minirt->thread + i), NULL);
 		i++;
@@ -81,37 +88,29 @@ void multi_thread(t_minirt *minirt)
 
 void	print_color(void *thread)
 {
-	int				x;
-	int				y;
+	int				xyi[3];
 	t_color			pixel_color;
 	t_thread		*t;
-	int				i;
 
 	t = (t_thread *)thread;
-	y = t->minirt->img_height / THREAD_NUM * t->id;
-	while (y < t->minirt->img_height / THREAD_NUM * (t->id + 1))
+	xyi[1] = t->minirt->img_height / THREAD_MAX * t->id;
+	while (xyi[1] < t->minirt->img_height / THREAD_MAX * (t->id + 1))
 	{
-		x = 0;
-		if (t->id == 0 && t->minirt->camera.k == 1)
-		{
-			printf("\rRendering %.2f%%", (double)(y + 1) / \
-			(t->minirt->img_height / THREAD_NUM) * 100);
-			fflush(stdout);
-		}
-		while (x < t->minirt->img_width)
+		xyi[0] = 0;
+		while (xyi[0] < t->minirt->img_width)
 		{
 			pixel_color = color(0, 0, 0);
-			anti_aliasing(t->minirt, x, y, &pixel_color);
-			i = 0;
-			while (i < t->minirt->camera.k && x + i < t->minirt->img_width)
+			anti_aliasing(t->minirt, xyi[0], xyi[1], &pixel_color);
+			xyi[2] = -1;
+			while (++xyi[2] < t->minirt->camera.k && xyi[0] + xyi[2] \
+			< t->minirt->img_width)
 			{
-				set_pixel(t->minirt, x + i, y, set_color(pixel_color, \
-				t->minirt->camera.samples_per_pixel));
-				i++;
+				set_pixel(t->minirt, xyi[0] + xyi[2], xyi[1], \
+				set_color(pixel_color, t->minirt->camera.samples_per_pixel));
 			}
-			x += t->minirt->camera.k;
+			xyi[0] += t->minirt->camera.k;
 		}
-		y += 1;
+		xyi[1] += 1;
 	}
 	pthread_exit(0);
 }
