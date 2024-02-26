@@ -6,7 +6,7 @@
 #    By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/26 19:04:30 by jeongbpa          #+#    #+#              #
-#    Updated: 2024/02/27 03:11:13 by jeongbpa         ###   ########.fr        #
+#    Updated: 2024/02/27 03:33:37 by jeongbpa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ HEADER = minirt.h
 HEADER_BONUS = minirt_bonus.h
 CFLAGS = -I./mlx_linux -I./includes/ -O3 -Wall -Wextra -Werror
 
-CC = gcc
+CC = cc
 NAME = minirt
 LIBMLX = ./mlx/libmlx.a
 
