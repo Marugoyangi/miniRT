@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:24:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/27 03:11:52 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/29 06:33:00 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,17 @@
 # include <unistd.h>
 # include <string.h>
 # include "../mlx/mlx.h"
+# include "../libft/libft.h"
 
 //including headers
 # include "vector.h"
 # include "interval.h"
 # include "texture.h"
 # include "object.h"
+# include "parse.h"
 # include "ray.h"
 # include "camera.h"
+# include "get_next_line.h"
 
 //bonus
 # include <pthread.h>
@@ -67,16 +70,17 @@ typedef struct s_minirt
 	pthread_t		thread[THREAD_MAX];
 	t_thread		thread_data[THREAD_MAX];
 	t_object		*light;
+	t_vec			ambient;
 }				t_minirt;
 
 # define PI			3.141592653589793238
 
 //object type
-# define SPHERE		1
-# define QUAD		2
-# define CYLINDER	3
-# define HYPOBOLOID	4
-# define BOX		5
+# define SPHERE			1
+# define QUAD			2
+# define CYLINDER		3
+# define HYPERBOLOID	4
+# define BOX			5
 
 //material type
 # define LAMBERTIAN	1
@@ -90,6 +94,7 @@ typedef struct s_minirt
 # define CHECKER	2
 # define IMAGE		3
 # define NOISE		4
+# define MOVING		5
 
 //key
 # define ESC		53
@@ -100,6 +105,12 @@ typedef struct s_minirt
 # define SPACE		49
 # define PLUS		24
 # define MINUS		27
+# define KW			13
+# define KS			1
+# define KA			0
+# define KD			2
+# define PGUP		116
+# define PGDN		121
 
 //utils
 int				ft_close(t_minirt *minirt);
@@ -203,10 +214,10 @@ t_cylinder		*cylinder(t_vec center, double diameter, double height, \
 int				hit_cylinder(t_ray *ray, t_cylinder *cylinder, \
 				t_interval t, t_hit_record *rec);
 
-//hypoboloid
-t_hypoboloid	*hypoboloid(t_point center, double diameter, \
+//hyperboloid
+t_hyperboloid	*hyperboloid(t_point center, double diameter, \
 				double height, t_material material);
-int				hit_hypoboloid(t_ray *ray, t_hypoboloid *hypoboloid, \
+int				hit_hyperboloid(t_ray *ray, t_hyperboloid *hyperboloid, \
 				t_interval t, t_hit_record *rec);
 
 //box
@@ -321,5 +332,36 @@ void	cornell_box_volume(t_minirt *minirt);
 void	final_scene(t_minirt *minirt);
 void	bump_test(t_minirt *minirt);
 void	cylinder_test(t_minirt *minirt);
+
+//init
+void		set_material(t_material *mat, int type, t_vec color);
+void		set_texture(t_minirt *minirt, t_material *material, int type, \
+				t_vec color[2]);
+void		parse_read_node(t_minirt *minirt, t_p_node *node, int width, \
+				double aspect_ratio);
+t_p_node	*parse_create_node(char *path);
+void		set_light(t_minirt *minirt, t_p_node *node);
+void		set_cam(t_minirt *minirt, t_p_node *node);
+void		set_ambient(t_minirt *minirt, t_p_node *node);
+void		set_sphere(t_minirt *minirt, t_p_node *node);
+void		set_plane(t_minirt *minirt, t_p_node *node);
+void		set_cylinder(t_minirt *minirt, t_p_node *node);
+void		set_hyperboloid(t_minirt *minirt, t_p_node *node);
+double		ft_atof(char *str);
+void		free_split(char **split);
+void		get_id(t_p_node *node, char **split);
+void		get_ambient(t_p_node *node, char **split);
+void		get_camera(t_p_node *node, char **split);
+void		get_light(t_p_node *node, char **split);
+void		get_sphere(t_p_node *node, char **split);
+void		get_plane(t_p_node *node, char **split);
+void		get_cylinder(t_p_node *node, char **split);
+void		get_hyperboloid(t_p_node *node, char **split);
+void		get_material(t_p_node *node, char **split);
+void		get_texture(t_p_node *node, char **split);
+void		get_transform(t_p_node *node, char **split);
+void		transform_by_normal(t_object *obj, t_vec normal, t_vec trans, \
+					t_vec scale);
+int			split_size(char **split);
 
 #endif

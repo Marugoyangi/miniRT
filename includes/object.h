@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 22:13:43 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/26 13:29:10 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:40:33 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_cylinder
 	t_aabb		bounding_box;
 }	t_cylinder;
 
-typedef struct s_hypoboloid
+typedef struct s_hyperboloid
 {
 	t_point		center;
 	double		diameter;
@@ -68,7 +68,7 @@ typedef struct s_hypoboloid
 	double		k;
 	t_material	material;
 	t_aabb		bounding_box;
-}	t_hypoboloid;
+}	t_hyperboloid;
 
 typedef struct s_box
 {

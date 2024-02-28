@@ -1,43 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector.h                                           :+:      :+:    :+:   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 13:02:15 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/28 19:13:21 by jeongbpa         ###   ########.fr       */
+/*   Created: 2023/12/16 07:46:07 by jeongbpa          #+#    #+#             */
+/*   Updated: 2023/12/16 07:50:34 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VECTOR_H
-# define VECTOR_H
+#include "libft.h"
 
-# include "minirt.h"
-
-typedef struct s_vec
+int	ft_strstr(char *str, char *to_find)
 {
-	double		x;
-	double		y;
-	double		z;
-}				t_vec;
+	int	i;
+	int	j;
 
-typedef struct s_matrix
-{
-	double		m1[4];
-	double		m2[4];
-	double		m3[4];
-	double		m4[4];
-}				t_matrix;
-
-typedef struct s_onb
-{
-	t_vec		u;
-	t_vec		v;
-	t_vec		w;
-}				t_onb;
-
-typedef struct s_vec	t_color;
-typedef struct s_vec	t_point;
-
-#endif
+	i = 0;
+	if (to_find[0] == 0)
+		return (0);
+	while (str[i])
+	{
+		j = 0;
+		while (str[i + j] && str[i + j] == to_find[j])
+		{
+			if (to_find[j + 1] == 0)
+				return (1);
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}

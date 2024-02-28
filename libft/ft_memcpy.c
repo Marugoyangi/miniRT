@@ -1,43 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector.h                                           :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 13:02:15 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/28 19:13:21 by jeongbpa         ###   ########.fr       */
+/*   Created: 2023/03/13 13:34:34 by jeongbpa          #+#    #+#             */
+/*   Updated: 2023/12/16 15:05:12 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VECTOR_H
-# define VECTOR_H
+#include "libft.h"
 
-# include "minirt.h"
-
-typedef struct s_vec
+void	*ft_memcpy(void *dest, const void *src, int n)
 {
-	double		x;
-	double		y;
-	double		z;
-}				t_vec;
+	int				i;
+	unsigned char	*destp;
+	unsigned char	*srcp;
 
-typedef struct s_matrix
-{
-	double		m1[4];
-	double		m2[4];
-	double		m3[4];
-	double		m4[4];
-}				t_matrix;
-
-typedef struct s_onb
-{
-	t_vec		u;
-	t_vec		v;
-	t_vec		w;
-}				t_onb;
-
-typedef struct s_vec	t_color;
-typedef struct s_vec	t_point;
-
-#endif
+	i = 0;
+	destp = (unsigned char *)dest;
+	srcp = (unsigned char *)src;
+	if (dest == 0)
+		return (0);
+	if (dest == src || src == 0)
+		return (dest);
+	while (i < n)
+	{
+		destp[i] = srcp[i];
+		i++;
+	}
+	return (dest);
+}

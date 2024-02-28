@@ -1,43 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector.h                                           :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 13:02:15 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/28 19:13:21 by jeongbpa         ###   ########.fr       */
+/*   Created: 2023/03/13 12:56:06 by jeongbpa          #+#    #+#             */
+/*   Updated: 2023/12/16 15:04:58 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VECTOR_H
-# define VECTOR_H
+#include "libft.h"
 
-# include "minirt.h"
-
-typedef struct s_vec
+void	*ft_memset(void *s, int c, int n)
 {
-	double		x;
-	double		y;
-	double		z;
-}				t_vec;
+	int				i;
+	unsigned char	*p;
 
-typedef struct s_matrix
-{
-	double		m1[4];
-	double		m2[4];
-	double		m3[4];
-	double		m4[4];
-}				t_matrix;
-
-typedef struct s_onb
-{
-	t_vec		u;
-	t_vec		v;
-	t_vec		w;
-}				t_onb;
-
-typedef struct s_vec	t_color;
-typedef struct s_vec	t_point;
-
-#endif
+	i = 0;
+	p = (unsigned char *)s;
+	while (i < n)
+	{
+		p[i] = (unsigned char)c;
+		i++;
+	}
+	return (s);
+}

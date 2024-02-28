@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 22:25:15 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/26 22:45:07 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:41:16 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ int	hit_object(t_object *object, t_ray *ray, \
 	else if (object->type == CYLINDER && hit_cylinder(ray, \
 		(t_cylinder *)object->element, *closest, &tmp_rec))
 		tmp_rec.material = ((t_cylinder *)object->element)->material;
-	else if (object->type == HYPOBOLOID && hit_hypoboloid(ray, \
-		(t_hypoboloid *)object->element, *closest, &tmp_rec))
-		tmp_rec.material = ((t_hypoboloid *)object->element)->material;
+	else if (object->type == HYPERBOLOID && hit_hyperboloid(ray, \
+		(t_hyperboloid *)object->element, *closest, &tmp_rec))
+		tmp_rec.material = ((t_hyperboloid *)object->element)->material;
 	else
 		return (0);
 	*rec = tmp_rec;
@@ -44,10 +44,10 @@ int	hit_object(t_object *object, t_ray *ray, \
 
 void	object_set(t_object *object, int type, void *element)
 {
-	if (type == HYPOBOLOID)
+	if (type == HYPERBOLOID)
 	{
-		object->element = (t_hypoboloid *)element;
-		object->bbox = ((t_hypoboloid *)element)->bounding_box;
+		object->element = (t_hyperboloid *)element;
+		object->bbox = ((t_hyperboloid *)element)->bounding_box;
 	}
 	else if (type == BOX)
 	{

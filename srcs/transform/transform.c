@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 15:21:37 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/07 14:34:58 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/28 19:37:36 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ void	transform(t_object *obj, t_vec rotation, t_vec translation, t_vec scale)
 {
 	t_matrix		tmp;
 
+	if (rotation.x == 0 && rotation.y == 0 && rotation.z == 0 && \
+		translation.x == 0 && translation.y == 0 && translation.z == 0 && \
+		scale.x == 1 && scale.y == 1 && scale.z == 1)
+		return ;
 	tmp = matrix_new();
 	obj->transform.is_transformed = 1;
 	obj->transform.translation = translation;

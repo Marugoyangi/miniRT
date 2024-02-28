@@ -1,43 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector.h                                           :+:      :+:    :+:   */
+/*   parse.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 13:02:15 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/28 19:13:21 by jeongbpa         ###   ########.fr       */
+/*   Created: 2024/02/28 17:23:47 by jeongbpa          #+#    #+#             */
+/*   Updated: 2024/02/28 22:36:37 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VECTOR_H
-# define VECTOR_H
+#ifndef PARSE_H
+# define PARSE_H
 
 # include "minirt.h"
 
-typedef struct s_vec
+typedef struct s_p_node
 {
-	double		x;
-	double		y;
-	double		z;
-}				t_vec;
+	int				id;
+	t_vec			coord;
+	t_vec			normal;
+	int				color[3];
+	double			geometric[2];
+	int				etc[2];
+	int				is_transformed;
+	t_vec			transform[3];
+	struct s_p_node	*next;
+}	t_p_node;
 
-typedef struct s_matrix
-{
-	double		m1[4];
-	double		m2[4];
-	double		m3[4];
-	double		m4[4];
-}				t_matrix;
-
-typedef struct s_onb
-{
-	t_vec		u;
-	t_vec		v;
-	t_vec		w;
-}				t_onb;
-
-typedef struct s_vec	t_color;
-typedef struct s_vec	t_point;
+# define A 1
+# define C 2
+# define L 3
+# define SP 4
+# define PL 5
+# define CY 6
+# define HY 7
 
 #endif

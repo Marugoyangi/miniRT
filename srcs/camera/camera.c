@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 03:45:00 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/07 20:45:33 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/29 07:19:25 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	set_camera(t_minirt *minirt, int fov, t_vec vec[3], double dof)
 	camera = &minirt->camera;
 	minirt->camera.max_depth = 50;
 	minirt->camera.focus_distance = 10.0;
-	minirt->camera.samples_per_pixel = 50;
+	minirt->camera.samples_per_pixel = 20;
 	camera->k = 1;
 	minirt->camera.fov = fov;
 	minirt->camera.origin = vec[0];

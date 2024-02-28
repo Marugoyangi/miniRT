@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 03:01:03 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/27 03:02:45 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:41:55 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -409,10 +409,10 @@ void	cylinder_test(t_minirt *minirt)
 	t_object *cy = object(CYLINDER, cylinder(vec(165, 200, 200), 200, 200, metal));
 	transform(cy, vec(0, -20, -30), vec(0, -18, 15), vec(1, 1, 1));
 	object_add_back(minirt, cy);
-	t_object *hb = object(HYPOBOLOID, hypoboloid(vec(400, 200, 300), 100, 200, metal));
+	t_object *hb = object(HYPERBOLOID, hyperboloid(vec(400, 200, 300), 100, 200, metal));
 	object_add_back(minirt, hb);
 	light_add_back(minirt, object(CYLINDER, cylinder(vec(165, 200, 200), 200, 200, metal)));
-	light_add_back(minirt, object(HYPOBOLOID, hypoboloid(vec(400, 200, 300), 100, 200, metal)));
+	light_add_back(minirt, object(HYPERBOLOID, hyperboloid(vec(400, 200, 300), 100, 200, metal)));
 	t_object **tmp = object_vector_init(minirt->object, 0, ft_lstsize(minirt->object));
 	minirt->bvh = bvh_node(tmp, 0, ft_lstsize(minirt->object));
 	free(tmp);
