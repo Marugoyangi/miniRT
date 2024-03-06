@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 07:12:29 by jeongbpa          #+#    #+#             */
-/*   Updated: 2023/05/23 15:20:16 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/29 08:02:44 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*cut_nl(char *s)
 		if (s[i++] == '\n')
 			break ;
 	}
-	len = i;
+	len = i - 1;
 	temp = (char *)malloc(sizeof (char) * (len + 1));
 	if (temp == 0)
 		return (0);

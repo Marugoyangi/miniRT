@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:22:56 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/29 04:10:29 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/04 10:31:59 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,8 @@ void	set_hyperboloid(t_minirt *minirt, t_p_node *node)
 	t_object	*obj;
 	t_vec		color[2];
 
-	color[0] = vec(random_double(0, 1), random_double(0, 1), \
-	random_double(0, 1));
-	color[1] = vec(random_double(0, 1), random_double(0, 1), \
-	random_double(0, 1));
+	color[0] = random_vec(0, 1);
+	color[1] = random_vec(0, 1);
 	set_material(&material, node->etc[0], vec(node->color[0], \
 	node->color[1], node->color[2]));
 	set_texture(minirt, &material, node->etc[1], color);
@@ -49,10 +47,8 @@ void	set_cylinder(t_minirt *minirt, t_p_node *node)
 	t_object	*obj;
 	t_vec		color[2];
 
-	color[0] = vec(random_double(0, 1), random_double(0, 1), \
-	random_double(0, 1));
-	color[1] = vec(random_double(0, 1), random_double(0, 1), \
-	random_double(0, 1));
+	color[0] = random_vec(0, 1);
+	color[1] = random_vec(0, 1);
 	set_material(&material, node->etc[0], vec(node->color[0], \
 	node->color[1], node->color[2]));
 	set_texture(minirt, &material, node->etc[1], color);
@@ -80,10 +76,8 @@ void	set_plane(t_minirt *minirt, t_p_node *node)
 	t_vec		color[2];
 	t_vec		quv[3];
 
-	color[0] = vec(random_double(0, 1), random_double(0, 1), \
-	random_double(0, 1));
-	color[1] = vec(random_double(0, 1), random_double(0, 1), \
-	random_double(0, 1));
+	color[0] = random_vec(0, 1);
+	color[1] = random_vec(0, 1);
 	quv[1] = vec_mul_const(vec(1, 0, 0), 1000);
 	quv[2] = vec_mul_const(vec(0, 1, 0), 1000);
 	quv[0] = vec_sub(node->coord, vec_div_const(quv[1], 2));
@@ -113,10 +107,8 @@ void	set_sphere(t_minirt *minirt, t_p_node *node)
 	t_object	*obj;
 	t_vec		_color[2];
 
-	_color[0] = vec(random_double(0, 1), random_double(0, 1), \
-	random_double(0, 1));
-	_color[1] = vec(random_double(0, 1), random_double(0, 1), \
-	random_double(0, 1));
+	_color[0] = random_vec(0, 1);
+	_color[1] = random_vec(0, 1);
 	set_material(&material, node->etc[0], vec(node->color[0], \
 	node->color[1], node->color[2]));
 	set_texture(minirt, &material, node->etc[1], _color);

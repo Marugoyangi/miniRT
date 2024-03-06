@@ -6,93 +6,66 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 17:41:29 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/29 04:31:25 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/06 12:06:29 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	hit_cap_record2(double t, t_hit_record *rec, \
-					t_ray *ray, t_hyperboloid *hyperboloid)
+void	hit_hyperboloid_record(double t, t_hit_record *rec, \
+							t_ray *ray, t_hyperboloid *hyperboloid)
 {
+	t_vec	tmp;
+
 	rec->t = t;
 	rec->p = ray_at(ray, rec->t);
-	if (rec->p.y < hyperboloid->center.y)
-		rec->normal = vec(0, -1, 0);
-	else
-		rec->normal = vec(0, 1, 0);
+	rec->normal = vec(2.0 * (rec->p.x - hyperboloid->center.x), \
+	-2.0 * (rec->p.y - hyperboloid->center.y), \
+	2.0 * (rec->p.z - hyperboloid->center.z));
+	rec->normal = vec_unit(rec->normal);
+	set_face_normal(ray, rec->normal, rec);
 	rec->material = hyperboloid->material;
-	return (1);
-}
-
-int	hit_cap2(t_ray *ray, t_hyperboloid *hyperboloid, \
-			t_interval _t, t_hit_record *rec)
-{
-	t_vec	oc;
-	double	t;
-	t_point	tmp;
-
-	oc = vec_sub(ray->origin, hyperboloid->center);
-	if (oc.x * oc.x + oc.z * oc.z <= pow(hyperboloid->diameter / 2, 2) \
-	&& oc.y >= -hyperboloid->height / 2 - hyperboloid->k && \
-	oc.y <= hyperboloid->height / 2 + hyperboloid->k)
-		return (0);
-	if (oc.y < -hyperboloid->height / 2 - hyperboloid->k || \
-	oc.y > hyperboloid->height / 2 + hyperboloid->k)
-		if (oc.y * ray->direction.y > 0)
-			return (0);
-	t = -(oc.y) / ray->direction.y;
-	if (oc.y > 0)
-		t = -(oc.y - hyperboloid->height / 2) / ray->direction.y;
-	else if (oc.y < 0)
-		t = -(oc.y + hyperboloid->height / 2) / ray->direction.y;
-	if (t < _t.min || t > _t.max)
-		return (0);
-	tmp = vec(oc.x + t * ray->direction.x, oc.y + t * \
-	ray->direction.y, oc.z + t * ray->direction.z);
-	if (tmp.x * tmp.x + tmp.z * tmp.z <= pow(hyperboloid->diameter, 2))
-		return (hit_cap_record2(t, rec, ray, hyperboloid));
-	return (0);
-}
-
-void	hyperboloid_set(double (*abc)[3], t_vec *oc, \
-					t_ray *ray, t_hyperboloid *hyperboloid)
-{
-	*oc = vec_sub(ray->origin, hyperboloid->center);
-	(*abc)[0] = ray->direction.y * ray->direction.y - \
-	ray->direction.x * ray->direction.x - ray->direction.z * ray->direction.z;
-	(*abc)[1] = 2.0 * (oc->y * ray->direction.y - oc->x * ray->direction.x \
-	- oc->z * ray->direction.z);
-	(*abc)[2] = oc->y * oc->y + hyperboloid->k - oc->x * oc->x \
-	- oc->z * oc->z;
+	tmp = vec_sub(rec->p, hyperboloid->center);
+	rec->u = atan2(tmp.z, tmp.x) / (2 * PI);
+	rec->v = (tmp.y + hyperboloid->height / 2) / hyperboloid->height;
 }
 
 int	hit_hyperboloid(t_ray *ray, t_hyperboloid *hyperboloid, \
 				t_interval _t, t_hit_record *rec)
 {
-	double	abc[3];
-	double	discriminant;
+	double	abc[5];
 	t_vec	oc;
+	double	discriminant;
 
-	if (hit_cap2(ray, hyperboloid, _t, rec))
-		return (1);
-	hyperboloid_set(&abc, &oc, ray, hyperboloid);
-	discriminant = abc[1] * abc[1] - 4 * abc[0] * abc[2];
-	if (discriminant < 0 || discriminant < 0.0000001)
+	oc = vec_sub(ray->origin, hyperboloid->center);
+	abc[0] = ray->direction.y * ray->direction.y - \
+	ray->direction.x * ray->direction.x - ray->direction.z * ray->direction.z;
+	abc[1] = 2.0 * (oc.y * ray->direction.y - oc.x * ray->direction.x - \
+	oc.z * ray->direction.z);
+	abc[2] = oc.y * oc.y + hyperboloid->k * hyperboloid->k - oc.x * oc.x - oc.z * oc.z;
+	discriminant = abc[1] * abc[1] - 4.0 * abc[0] * abc[2];
+	if (discriminant < 0 || discriminant < 0.0001)
 		return (0);
-	discriminant = sqrt(discriminant);
-	abc[2] = (-abc[1] - discriminant) / (2 * abc[0]);
-	abc[1] = (-abc[1] + discriminant) / (2 * abc[0]);
-	abc[0] = fmin(abc[1], abc[2]);
-	rec->t = abc[0];
-	if (rec->t < _t.min || rec->t > _t.max)
+	abc[2] = (-abc[1] - sqrt(discriminant)) / (2.0 * abc[0]);
+	abc[1] = (-abc[1] + sqrt(discriminant)) / (2.0 * abc[0]);
+	abc[3] = fmin(abc[2], abc[1]);
+	abc[4] = fmax(abc[2], abc[1]);
+	if (abc[3] < _t.min || abc[3] > _t.max)
+	{
+		if (abc[4] < _t.min || abc[4] > _t.max)
+			return (0);
+	}
+	if (ray_at(ray, abc[3]).y > hyperboloid->center.y + hyperboloid->height / 2 || \
+		ray_at(ray, abc[3]).y < hyperboloid->center.y - hyperboloid->height / 2)
+	{
+		if (ray_at(ray, abc[4]).y > hyperboloid->center.y + hyperboloid->height / 2 || \
+			ray_at(ray, abc[4]).y < hyperboloid->center.y - hyperboloid->height / 2)
+			return (0);
+		abc[3] = abc[4];
+	}
+	if (abc[3] < _t.min || abc[3] > _t.max)
 		return (0);
-	rec->p = ray_at(ray, rec->t);
-	if (rec->p.y < hyperboloid->center.y - hyperboloid->height / 2 \
-	|| rec->p.y > hyperboloid->center.y + hyperboloid->height / 2)
-		return (0);
-	rec->normal = vec_unit(vec(-2 * rec->p.x, 2 * rec->p.y, -2 * rec->p.z));
-	rec->material = hyperboloid->material;
+	hit_hyperboloid_record(abc[3], rec, ray, hyperboloid);
 	return (1);
 }
 
@@ -106,9 +79,9 @@ t_hyperboloid	*hyperboloid(t_point center, double diameter, \
 	hyperboloid->diameter = diameter;
 	hyperboloid->height = height;
 	hyperboloid->material = material;
-	hyperboloid->k = -2;
-	hyperboloid->bounding_box = aabb(vec_sub(center, \
-	vec(diameter, height / 2 + hyperboloid->k, diameter)), \
-	vec_add(center, vec(diameter, height / 2 + hyperboloid->k, diameter)));
+	hyperboloid->k = 3;
+	hyperboloid->bounding_box = aabb_pad(aabb(vec(center.x - \
+	diameter / 2, center.y - height / 2, center.z - diameter / 2), \
+	vec(center.x + diameter / 2, center.y + height / 2, center.z + diameter / 2)));
 	return (hyperboloid);
 }

@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 20:16:52 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/26 20:17:00 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/29 09:09:26 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ float	random_from_memory(unsigned int *seed)
 
 double	random_double(double min, double max)
 {
-	static unsigned int		seed = 0x12345678;
+	static unsigned int		seed = 0x2f6e2b1;
 	float					tmp;
 
 	tmp = random_from_memory(&seed);

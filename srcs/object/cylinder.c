@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 14:32:31 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/26 22:13:59 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/04 10:52:45 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ int	hit_cap_record(double t, t_hit_record *rec, \
 {
 	rec->t = t;
 	rec->p = ray_at(ray, rec->t);
-	if (rec->p.y < cylinder->center.y)
+	if (rec->p.y - cylinder->center.y < cylinder->height / 2)
 		rec->normal = vec(0, -1, 0);
 	else
 		rec->normal = vec(0, 1, 0);
 	rec->material = cylinder->material;
+	rec->u = rec->p.x / cylinder->diameter / PI;
+	rec->v = rec->p.z / cylinder->diameter / PI;
 	return (1);
 }
 
@@ -66,38 +68,38 @@ int	hit_cylinder_record(double t, t_hit_record *rec, \
 	rec->normal = vec_unit(rec->normal);
 	set_face_normal(ray, rec->normal, rec);
 	rec->material = cylinder->material;
-	phi = atan2(rec->normal.z, rec->normal.x);
-	theta = asin(rec->normal.y);
-	rec->u = 1 - (phi + M_PI) / (2 * M_PI);
-	rec->v = (theta + M_PI / 2) / M_PI;
+	phi = rec->p.x / cylinder->diameter;
+	theta = rec->p.y / cylinder->diameter;
+	rec->u = phi / PI;
+	rec->v = theta / PI;
 	return (1);
 }
 
 int	hit_cylinder(t_ray *ray, t_cylinder *cylinder, \
 				t_interval _t, t_hit_record *rec)
 {
-	t_vec		oc;
-	double		abc[3];
-	double		discriminant;
+	t_vec			oc;
+	double			abc[4];
+	double			discriminant;
 
 	oc = vec_sub(ray->origin, cylinder->center);
-	if (hit_cap(ray, cylinder, _t, rec))
-		return (1);
+	abc[3] = hit_cap(ray, cylinder, _t, rec);
 	abc[0] = pow(ray->direction.x, 2) + pow(ray->direction.z, 2);
 	abc[1] = 2 * (oc.x * ray->direction.x + oc.z * ray->direction.z);
 	abc[2] = pow(oc.x, 2) + pow(oc.z, 2) - pow(cylinder->diameter / 2, 2);
 	discriminant = abc[1] * abc[1] - 4 * abc[0] * abc[2];
 	if (discriminant < 0 || discriminant < 0.0000001)
-		return (0);
+		return (abc[3]);
 	abc[2] = (-abc[1] - sqrt(discriminant)) / (2 * abc[0]);
 	abc[1] = (-abc[1] + sqrt(discriminant)) / (2 * abc[0]);
 	abc[0] = fmin(abc[1], abc[2]);
 	if (abc[0] < _t.min || abc[0] > _t.max)
-		return (0);
+		return (abc[3]);
 	if (ray_at(ray, abc[0]).y < cylinder->center.y - cylinder->height / 2 || \
 		ray_at(ray, abc[0]).y > cylinder->center.y + cylinder->height / 2)
-		return (0);
-	return (hit_cylinder_record(abc[0], rec, ray, cylinder));
+		return (abc[3]);
+	hit_cylinder_record(abc[0], rec, ray, cylinder);
+	return (1);
 }
 
 t_cylinder	*cylinder(t_vec center, double diameter, \

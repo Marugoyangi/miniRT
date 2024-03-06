@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:24:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/29 06:33:00 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/29 09:11:40 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -363,5 +363,6 @@ void		get_transform(t_p_node *node, char **split);
 void		transform_by_normal(t_object *obj, t_vec normal, t_vec trans, \
 					t_vec scale);
 int			split_size(char **split);
+void	get_sphere_uv(t_hit_record *rec, t_vec p);
 
 #endif

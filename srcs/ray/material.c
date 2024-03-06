@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 06:58:27 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/29 07:34:16 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/29 07:47:28 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ int	lambertian_bumped(t_ray *_ray, t_hit_record *rec, t_ray *scattered, \
 	scattered_direction = \
 	image_color(rec->material.texture.normal_map, rec);
 	scattered_direction = vec_add(scattered_direction, \
-	vec_mul_const(random_in_unit_disk(), rec->material.fuzz));
+	random_in_sphere());
+	rec->normal = scattered_direction;
 	*scattered = ray(rec->p, scattered_direction, _ray->time);
 	srec->is_specular = 0;
 	srec->attenuation = rec->material.albedo;

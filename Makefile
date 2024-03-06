@@ -6,7 +6,7 @@
 #    By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/26 19:04:30 by jeongbpa          #+#    #+#              #
-#    Updated: 2024/02/28 23:26:54 by jeongbpa         ###   ########.fr        #
+#    Updated: 2024/03/06 08:25:08 by jeongbpa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ BONUS_OBJS = $(BONUS_SRCS:.c=.o)
 
 HEADER = minirt.h
 HEADER_BONUS = minirt_bonus.h
-CFLAGS = -I./mlx_linux -I./includes/ -I./libft -O3 -g3 -Wall -Wextra -Werror
+CFLAGS = -I./mlx_linux -I./includes/ -I./libft -O3 -g3 #-Wall -Wextra -Werror
 
 CC = cc
 NAME = minirt

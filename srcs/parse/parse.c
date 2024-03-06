@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 17:33:53 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/29 01:28:07 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/02/29 08:01:53 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ t_p_node	*parse_create_node(char *path)
 	while (line)
 	{
 		split = ft_split(line, ' ');
-		if (split[0] == NULL || split[0][0] == '\n')
+		if (split[0] == NULL)
 		{
 			free_split(split);
 			free(line);

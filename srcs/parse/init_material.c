@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:28:24 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/29 07:13:27 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/04 07:00:35 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	set_texture(t_minirt *minirt, t_material *mat, \
 	if (type == CHECKER)
 	{
 		mat->texture.checker.color1 = color[0];
-		mat->texture.checker.color2 = color[1];
-		mat->texture.checker.scale = 0.6;
+		mat->texture.checker.color2 = vec(0, 0, 0);
+		mat->texture.checker.scale = 0.06;
 	}
 	else if (type == NOISE)
 		perlin_generate(&mat->texture.perlin, 0.4);
