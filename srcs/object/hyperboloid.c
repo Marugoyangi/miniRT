@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 17:41:29 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/06 12:06:29 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 11:35:04 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,19 @@ int	hit_hyperboloid(t_ray *ray, t_hyperboloid *hyperboloid, \
 	double	abc[5];
 	t_vec	oc;
 	double	discriminant;
+	double	tmp;
 
+	tmp = hyperboloid->diameter * hyperboloid->diameter / 16;
 	oc = vec_sub(ray->origin, hyperboloid->center);
 	abc[0] = ray->direction.y * ray->direction.y - \
-	ray->direction.x * ray->direction.x - ray->direction.z * ray->direction.z;
-	abc[1] = 2.0 * (oc.y * ray->direction.y - oc.x * ray->direction.x - \
-	oc.z * ray->direction.z);
-	abc[2] = oc.y * oc.y + hyperboloid->k * hyperboloid->k - oc.x * oc.x - oc.z * oc.z;
+	ray->direction.x * ray->direction.x / tmp * 32 \
+	 - ray->direction.z * ray->direction.z / tmp * 32;
+	abc[1] = 2.0 * (oc.y * ray->direction.y - oc.x * ray->direction.x / \
+	tmp * 32 - oc.z * ray->direction.z / tmp * 32);
+	abc[2] = oc.y * oc.y + hyperboloid->k * hyperboloid->k - oc.x * oc.x / tmp * 32 \
+	- oc.z * oc.z / tmp * 32;
 	discriminant = abc[1] * abc[1] - 4.0 * abc[0] * abc[2];
-	if (discriminant < 0 || discriminant < 0.0001)
+	if (discriminant < 0 || discriminant < 0.000001)
 		return (0);
 	abc[2] = (-abc[1] - sqrt(discriminant)) / (2.0 * abc[0]);
 	abc[1] = (-abc[1] + sqrt(discriminant)) / (2.0 * abc[0]);
@@ -79,9 +83,9 @@ t_hyperboloid	*hyperboloid(t_point center, double diameter, \
 	hyperboloid->diameter = diameter;
 	hyperboloid->height = height;
 	hyperboloid->material = material;
-	hyperboloid->k = 3;
+	hyperboloid->k = 6;
 	hyperboloid->bounding_box = aabb_pad(aabb(vec(center.x - \
-	diameter / 2, center.y - height / 2, center.z - diameter / 2), \
-	vec(center.x + diameter / 2, center.y + height / 2, center.z + diameter / 2)));
+	diameter, center.y - height / 2, center.z - diameter), \
+	vec(center.x + diameter, center.y + height / 2, center.z + diameter)));
 	return (hyperboloid);
 }

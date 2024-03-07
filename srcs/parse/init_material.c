@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:28:24 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/04 07:00:35 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 11:53:30 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	set_texture(t_minirt *minirt, t_material *mat, \
 		mat->texture.checker.scale = 0.06;
 	}
 	else if (type == NOISE)
-		perlin_generate(&mat->texture.perlin, 0.4);
+		perlin_generate(&mat->texture.perlin, 0.1);
 	else if (type == IMAGE)
 	{
 		mat->texture.image = image_init(minirt->mlx, "./img/earthmap.xpm");
@@ -31,8 +31,6 @@ void	set_texture(t_minirt *minirt, t_material *mat, \
 		"./img/earthmap_normal.xpm");
 		mat->texture.is_bumped = 1;
 	}
-	else if (type == MOVING)
-		mat->texture.type = SOLID;
 	else
 		mat->texture.type = SOLID;
 }
@@ -49,7 +47,7 @@ void	set_material(t_material *mat, int type, t_vec color)
 	else if (type == DIELECTRIC)
 		*mat = material(DIELECTRIC, vec(1, 1, 1), 1.5, 0);
 	else if (type == DIFFUSE)
-		*mat = material(DIFFUSE, tmp, 0, 0);
+		*mat = material(DIFFUSE, vec_mul_const(tmp, 10), 0, 0);
 	else
 		*mat = material(LAMBERTIAN, tmp, 0, 0);
 }

@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 16:28:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/26 20:32:47 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 13:25:33 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,13 @@ t_ray	ray_transform(t_ray *ray, t_matrix inverse)
 	return (ret);
 }
 
-int	hit_transformed(t_object *obj, t_ray *ray, t_interval *closest, \
+int	hit_transformed(t_object *obj, t_ray *_ray, t_interval *closest, \
 					t_hit_record *rec)
 {
 	t_ray			tmp_ray;
 
-	tmp_ray = ray_transform(ray, obj->transform.inverse);
+	tmp_ray = *_ray;
+	tmp_ray = ray_transform(&tmp_ray, obj->transform.inverse);
 	if (!hit_object(obj, &tmp_ray, closest, rec))
 		return (0);
 	closest->max = rec->t;

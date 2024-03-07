@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 14:32:31 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/04 10:52:45 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 11:35:06 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	hit_cylinder(t_ray *ray, t_cylinder *cylinder, \
 	abc[1] = 2 * (oc.x * ray->direction.x + oc.z * ray->direction.z);
 	abc[2] = pow(oc.x, 2) + pow(oc.z, 2) - pow(cylinder->diameter / 2, 2);
 	discriminant = abc[1] * abc[1] - 4 * abc[0] * abc[2];
-	if (discriminant < 0 || discriminant < 0.0000001)
+	if (discriminant < 0 || discriminant < 0.000001)
 		return (abc[3]);
 	abc[2] = (-abc[1] - sqrt(discriminant)) / (2 * abc[0]);
 	abc[1] = (-abc[1] + sqrt(discriminant)) / (2 * abc[0]);

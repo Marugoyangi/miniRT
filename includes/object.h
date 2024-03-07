@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 22:13:43 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/28 17:40:33 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 12:53:41 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ typedef struct s_object
 {
 	int					type;
 	t_aabb				bbox;
+	t_vec				center;
 	void				*element;
 	struct s_object		*next;
 	struct s_transform	transform;

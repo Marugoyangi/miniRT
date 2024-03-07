@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:22:33 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/26 21:47:09 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 11:45:11 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	hit_volume_record_obj(double t, t_ray *ray, t_hit_record *rec, \
 {
 	rec->t = t;
 	rec->p = ray_at(ray, t);
+	if (object->transform.is_transformed)
+		rec->p = matrix_apply(object->transform.matrix, rec->p, 1);
 	rec->material.type = PHASE;
 	rec->material.albedo = object->volume.color;
 	rec->normal = vec(1, 0, 0);
@@ -69,13 +71,14 @@ int	hit_volume(t_object *object, t_ray *_ray, \
 	t_ray			tmp_ray;
 	t_interval		tmp;
 
-	tmp = interval(-INFINITY, INFINITY);
+	tmp = interval(0.0001, closest->max);
 	tmp_ray = *_ray;
 	if (object->transform.is_transformed)
 		tmp_ray = ray_transform(&tmp_ray, object->transform.inverse);
 	if (!hit_object(object, &tmp_ray, &tmp, &tmp_rec[0]))
 		return (0);
-	tmp = interval(tmp_rec[0].t + 0.0001, closest->max);
+	tmp = interval(tmp_rec[0].t + 0.00001, closest->max);
+	tmp_ray.t = tmp;
 	if (!hit_object(object, &tmp_ray, &tmp, &tmp_rec[1]))
 		return (0);
 	if (!hit_volume_clamp(&tmp_rec, closest))

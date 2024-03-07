@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 17:23:47 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/28 22:36:37 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 09:38:51 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ typedef struct s_p_node
 # define PL 5
 # define CY 6
 # define HY 7
+# define BO 8
 
 #endif

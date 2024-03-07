@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:24:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/29 09:11:40 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 10:48:33 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,13 @@ typedef struct s_minirt
 # define DIELECTRIC	3
 # define DIFFUSE	4
 # define PHASE		5
+# define MOVING		6
 
 //texture type
 # define SOLID		1
 # define CHECKER	2
 # define IMAGE		3
 # define NOISE		4
-# define MOVING		5
 
 //key
 # define ESC		53
@@ -245,7 +245,6 @@ t_aabb			aabb_pad(t_aabb aabb);
 
 //aabb_utils
 void			ft_swap(double *a, double *b);
-t_aabb			get_box(t_object *object);
 
 //bvh
 int				bvh_hit(t_bvh *node, t_ray *ray, t_interval *closest, \
@@ -345,6 +344,7 @@ void		set_cam(t_minirt *minirt, t_p_node *node);
 void		set_ambient(t_minirt *minirt, t_p_node *node);
 void		set_sphere(t_minirt *minirt, t_p_node *node);
 void		set_plane(t_minirt *minirt, t_p_node *node);
+void		set_box(t_minirt *minirt, t_p_node *node);
 void		set_cylinder(t_minirt *minirt, t_p_node *node);
 void		set_hyperboloid(t_minirt *minirt, t_p_node *node);
 double		ft_atof(char *str);
@@ -357,6 +357,7 @@ void		get_sphere(t_p_node *node, char **split);
 void		get_plane(t_p_node *node, char **split);
 void		get_cylinder(t_p_node *node, char **split);
 void		get_hyperboloid(t_p_node *node, char **split);
+void		get_box(t_p_node *node, char **split);
 void		get_material(t_p_node *node, char **split);
 void		get_texture(t_p_node *node, char **split);
 void		get_transform(t_p_node *node, char **split);

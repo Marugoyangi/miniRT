@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 15:21:37 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/28 19:37:36 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 13:37:36 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,24 @@ t_matrix	matrix_rotate_x(double angle)
 	mat.m3[2] = cos(angle);
 	mat.m4[3] = 1.0f;
 	return (mat);
+}
+
+void	set_center_aabb(t_aabb *bbox, t_object *obj)
+{
+	t_interval xyz[3];
+
+	xyz[0] = obj->bbox.x;
+	xyz[1] = obj->bbox.y;
+	xyz[2] = obj->bbox.z;
+	xyz[0].min = (xyz[0].min - obj->center.x);
+	xyz[0].max = (xyz[0].max - obj->center.x);
+	xyz[1].min = (xyz[1].min - obj->center.y);
+	xyz[1].max = (xyz[1].max - obj->center.y);
+	xyz[2].min = (xyz[2].min - obj->center.z);
+	xyz[2].max = (xyz[2].max - obj->center.z);
+	bbox->x = interval(xyz[0].min, xyz[0].max);
+	bbox->y = interval(xyz[1].min, xyz[1].max);
+	bbox->z = interval(xyz[2].min, xyz[2].max);
 }
 
 void	transform(t_object *obj, t_vec rotation, t_vec translation, t_vec scale)

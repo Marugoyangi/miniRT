@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 22:25:15 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/28 17:41:16 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 13:02:59 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,14 @@ void	object_set(t_object *object, int type, void *element)
 	{
 		object->element = (t_hyperboloid *)element;
 		object->bbox = ((t_hyperboloid *)element)->bounding_box;
+		object->center = ((t_hyperboloid *)element)->center;
 	}
 	else if (type == BOX)
 	{
 		object->element = (t_box *)element;
 		object->bbox = ((t_box *)element)->bounding_box;
+		object->center = vec_div_const(vec_add(((t_box *)element)->min,
+				((t_box *)element)->max), 2);
 	}
 }
 
@@ -69,16 +72,22 @@ t_object	*object(int type, void *element)
 	{
 		object->element = (t_sphere *)element;
 		object->bbox = ((t_sphere *)element)->bounding_box;
+		object->center = ((t_sphere *)element)->center;
 	}
 	else if (type == QUAD)
 	{
 		object->element = (t_quad *)element;
 		object->bbox = ((t_quad *)element)->bounding_box;
+		object->center = vec_add(((t_quad *)element)->q,
+				vec_div_const(((t_quad *)element)->u, 2));
+		object->center = vec_add(object->center,
+				vec_div_const(((t_quad *)element)->v, 2));
 	}
 	else if (type == CYLINDER)
 	{
 		object->element = (t_cylinder *)element;
 		object->bbox = ((t_cylinder *)element)->bounding_box;
+		object->center = ((t_cylinder *)element)->center;
 	}
 	else
 		object_set(object, type, element);

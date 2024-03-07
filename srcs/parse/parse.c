@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 17:33:53 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/29 08:01:53 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 09:36:36 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	parse_read_node(t_minirt *minirt, t_p_node *node, \
 			set_cylinder(minirt, tmp);
 		else if (tmp->id == HY)
 			set_hyperboloid(minirt, tmp);
+		else if (tmp->id == BO)
+			set_box(minirt, tmp);
 		tmp = tmp->next;
 	}
 	free_p_node(node);
@@ -68,6 +70,8 @@ void	get_id(t_p_node *node, char **split)
 		get_cylinder(node, split);
 	else if (!ft_strcmp(split[0], "hy"))
 		get_hyperboloid(node, split);
+	else if (!ft_strcmp(split[0], "bo"))
+		get_box(node, split);
 	else
 		ft_error("Error\n");
 }

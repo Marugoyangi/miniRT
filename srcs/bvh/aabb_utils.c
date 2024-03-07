@@ -6,23 +6,11 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 08:36:47 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/28 17:40:33 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 09:37:40 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-t_aabb	get_box(t_object *object)
-{
-	if (object->type == SPHERE)
-		return (((t_sphere *)object->element)->bounding_box);
-	else if (object->type == QUAD)
-		return (((t_quad *)object->element)->bounding_box);
-	else if (object->type == CYLINDER)
-		return (((t_cylinder *)object->element)->bounding_box);
-	else
-		return (((t_hyperboloid *)object->element)->bounding_box);
-}
 
 void	ft_swap(double *a, double *b)
 {

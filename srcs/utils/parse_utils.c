@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 22:50:57 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/29 00:10:49 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 08:22:28 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,31 +24,36 @@ int	split_size(char **split)
 
 double	ft_atof(char *str)
 {
-	double		d[3];
-	int			i;
+	double	result;
+	double	sign;
+	double	decimal;
+	int		i;
 
+	result = 0;
+	sign = 1;
+	decimal = 0;
 	i = 0;
-	d[0] = 0;
-	d[1] = 0;
-	d[2] = 1;
 	if (str[i] == '-')
 	{
-		d[2] = -1;
+		sign = -1;
 		i++;
 	}
 	while (ft_isdigit(str[i]))
 	{
-		d[0] = d[0] * 10 + str[i] - '0';
+		result = result * 10 + str[i] - '0';
 		i++;
 	}
 	if (str[i] == '.')
 		i++;
 	while (ft_isdigit(str[i]))
 	{
-		d[1] = d[1] * 10 + str[i] - '0';
+		result = result * 10 + str[i] - '0';
+		decimal++;
 		i++;
 	}
-	return (d[2] * (d[0] + d[1] / pow(10, i)));
+	while (decimal--)
+		result /= 10;
+	return (result * sign);
 }
 
 void	free_split(char **split)

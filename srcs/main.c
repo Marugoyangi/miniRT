@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:25:06 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/04 07:49:01 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 14:21:51 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,30 +51,6 @@ int	main(int argc, char **argv)
 		tmp = object_vector_init(minirt.object, 0, ft_lstsize(minirt.object));
 		minirt.bvh = bvh_node(tmp, 0, ft_lstsize(minirt.object));
 		free(tmp);
-		// if (!strcmp(argv[1], "1"))
-		// 	minirt_random_spheres(&minirt);
-		// else if (!strcmp(argv[1], "2"))
-		// 	two_spheres(&minirt);
-		// else if (!strcmp(argv[1], "3"))
-		// 	earth(&minirt);
-		// else if (!strcmp(argv[1], "4"))
-		// 	two_perlin_spheres(&minirt);
-		// else if (!strcmp(argv[1], "5"))
-		// 	quads(&minirt);
-		// else if (!strcmp(argv[1], "6"))
-		// 	simple_light(&minirt);
-		// else if (!strcmp(argv[1], "7"))
-		// 	cornell_box(&minirt);
-		// else if (!strcmp(argv[1], "8"))
-		// 	cornell_box_volume(&minirt);
-		// else if (!strcmp(argv[1], "9"))
-		// 	final_scene(&minirt);
-		// else if (!strcmp(argv[1], "10"))
-		// 	bump_test(&minirt);
-		// else if (!strcmp(argv[1], "11"))
-		// 	cylinder_test(&minirt);
-		// else
-		// 	exit(1);
 		multi_thread(&minirt);
 		mlx_put_image_to_window(minirt.mlx, minirt.win, \
 								minirt.img->img_ptr, 0, 0);
@@ -83,3 +59,4 @@ int	main(int argc, char **argv)
 		mlx_loop(minirt.mlx);
 	}
 }
+

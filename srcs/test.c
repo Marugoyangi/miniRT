@@ -6,9 +6,35 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 03:01:03 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/02/28 17:41:55 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 14:22:01 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+//testcase
+		// if (!strcmp(argv[1], "1"))
+		// 	minirt_random_spheres(&minirt);
+		// else if (!strcmp(argv[1], "2"))
+		// 	two_spheres(&minirt);
+		// else if (!strcmp(argv[1], "3"))
+		// 	earth(&minirt);
+		// else if (!strcmp(argv[1], "4"))
+		// 	two_perlin_spheres(&minirt);
+		// else if (!strcmp(argv[1], "5"))
+		// 	quads(&minirt);
+		// else if (!strcmp(argv[1], "6"))
+		// 	simple_light(&minirt);
+		// else if (!strcmp(argv[1], "7"))
+		// 	cornell_box(&minirt);
+		// else if (!strcmp(argv[1], "8"))
+		// 	cornell_box_volume(&minirt);
+		// else if (!strcmp(argv[1], "9"))
+		// 	final_scene(&minirt);
+		// else if (!strcmp(argv[1], "10"))
+		// 	bump_test(&minirt);
+		// else if (!strcmp(argv[1], "11"))
+		// 	cylinder_test(&minirt);
+		// else
+		// 	exit(1);
 
 #include "minirt.h"
 
