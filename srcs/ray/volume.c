@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:22:33 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 11:45:11 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 14:40:03 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,13 @@ int	hit_volume(t_object *object, t_ray *_ray, \
 	t_ray			tmp_ray;
 	t_interval		tmp;
 
-	tmp = interval(0.0001, closest->max);
+	tmp = interval(0.001, INFINITY);
 	tmp_ray = *_ray;
 	if (object->transform.is_transformed)
 		tmp_ray = ray_transform(&tmp_ray, object->transform.inverse);
 	if (!hit_object(object, &tmp_ray, &tmp, &tmp_rec[0]))
 		return (0);
-	tmp = interval(tmp_rec[0].t + 0.00001, closest->max);
+	tmp = interval(tmp_rec[0].t + 0.001, closest->max);
 	tmp_ray.t = tmp;
 	if (!hit_object(object, &tmp_ray, &tmp, &tmp_rec[1]))
 		return (0);

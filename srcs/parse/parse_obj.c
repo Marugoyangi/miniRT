@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 21:30:11 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 09:43:20 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:31:18 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	get_cylinder(t_p_node *node, char **split)
 	char	**coord;
 
 	ft_memset(node, 0, sizeof(t_p_node));
-	node->id = CY;
 	if (split_size(split) != 6 && split_size(split) != 11)
 		ft_error("Error\n");
 	coord = ft_split(split[1], ',');
@@ -45,15 +44,7 @@ void	get_cylinder(t_p_node *node, char **split)
 	coord = ft_split(split[5], ',');
 	if (split_size(coord) != 3)
 		ft_error("Error\n");
-	node->color[0] = ft_atoi(coord[0]);
-	node->color[1] = ft_atoi(coord[1]);
-	node->color[2] = ft_atoi(coord[2]);
-	free_split(coord);
-	node->transform[2] = vec(1, 1, 1);
-	node->etc[0] = LAMBERTIAN;
-	node->etc[1] = 1;
-	if (split_size(split) == 11)
-		get_material(node, split);
+	get_cylinder_util(node, split, coord);
 }
 
 void	get_plane(t_p_node *node, char **split)
@@ -81,15 +72,7 @@ void	get_plane(t_p_node *node, char **split)
 	coord = ft_split(split[3], ',');
 	if (split_size(coord) != 3)
 		ft_error("Error\n");
-	node->color[0] = ft_atoi(coord[0]);
-	node->color[1] = ft_atoi(coord[1]);
-	node->color[2] = ft_atoi(coord[2]);
-	free_split(coord);
-	node->transform[2] = vec(1, 1, 1);
-	node->etc[0] = LAMBERTIAN;
-	node->etc[1] = 1;
-	if (split_size(split) == 9)
-		get_material(node, split);
+	get_plane_util(node, split, coord);
 }
 
 void	get_sphere(t_p_node *node, char **split)
@@ -115,15 +98,7 @@ void	get_sphere(t_p_node *node, char **split)
 	coord = ft_split(split[3], ',');
 	if (split_size(coord) != 3)
 		ft_error("Error\n");
-	node->color[0] = ft_atoi(coord[0]);
-	node->color[1] = ft_atoi(coord[1]);
-	node->color[2] = ft_atoi(coord[2]);
-	free_split(coord);
-	node->transform[2] = vec(1, 1, 1);
-	node->etc[0] = LAMBERTIAN;
-	node->etc[1] = 1;
-	if (split_size(split) == 9)
-		get_material(node, split);
+	get_sphere_util(node, split, coord);
 }
 
 void	get_box(t_p_node *node, char **split)
@@ -151,13 +126,5 @@ void	get_box(t_p_node *node, char **split)
 	coord = ft_split(split[3], ',');
 	if (split_size(coord) != 3)
 		ft_error("Error\n");
-	node->color[0] = ft_atoi(coord[0]);
-	node->color[1] = ft_atoi(coord[1]);
-	node->color[2] = ft_atoi(coord[2]);
-	free_split(coord);
-	node->transform[2] = vec(1, 1, 1);
-	node->etc[0] = LAMBERTIAN;
-	node->etc[1] = 1;
-	if (split_size(split) == 9)
-		get_material(node, split);
+	get_box_util(node, split, coord);
 }

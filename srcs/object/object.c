@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 22:25:15 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 13:02:59 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:13:56 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,12 @@ int	hit_object(t_object *object, t_ray *ray, \
 	return (rec->hit_anything);
 }
 
-void	object_set(t_object *object, int type, void *element)
+t_object	*object_set(t_object *object, int type, void *element)
 {
+	object->type = type;
+	object->next = NULL;
+	object->transform.is_transformed = 0;
+	object->volume.density = 0;
 	if (type == HYPERBOLOID)
 	{
 		object->element = (t_hyperboloid *)element;
@@ -54,9 +58,10 @@ void	object_set(t_object *object, int type, void *element)
 	{
 		object->element = (t_box *)element;
 		object->bbox = ((t_box *)element)->bounding_box;
-		object->center = vec_div_const(vec_add(((t_box *)element)->min,
-				((t_box *)element)->max), 2);
+		object->center = vec_div_const(vec_add(((t_box *)element)->min, \
+		((t_box *)element)->max), 2);
 	}
+	return (object);
 }
 
 t_object	*object(int type, void *element)
@@ -64,10 +69,6 @@ t_object	*object(int type, void *element)
 	t_object	*object;
 
 	object = (t_object *)ft_malloc(sizeof(t_object));
-	object->type = type;
-	object->next = NULL;
-	object->transform.is_transformed = 0;
-	object->volume.density = 0;
 	if (type == SPHERE)
 	{
 		object->element = (t_sphere *)element;
@@ -89,9 +90,7 @@ t_object	*object(int type, void *element)
 		object->bbox = ((t_cylinder *)element)->bounding_box;
 		object->center = ((t_cylinder *)element)->center;
 	}
-	else
-		object_set(object, type, element);
-	return (object);
+	return (object_set(object, type, element));
 }
 
 void	light_add_back(t_minirt *minirt, t_object *new)

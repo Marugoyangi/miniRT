@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 22:50:57 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 08:22:28 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:10:27 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,36 +24,31 @@ int	split_size(char **split)
 
 double	ft_atof(char *str)
 {
-	double	result;
-	double	sign;
-	double	decimal;
-	int		i;
+	double	d[4];
 
-	result = 0;
-	sign = 1;
-	decimal = 0;
-	i = 0;
-	if (str[i] == '-')
+	d[0] = 0;
+	d[1] = 1;
+	d[2] = 0;
+	d[3] = 0;
+	if (str[(int)d[3]] == '-')
 	{
-		sign = -1;
-		i++;
+		d[1] = -1;
+		d[3] += 1;
 	}
-	while (ft_isdigit(str[i]))
+	d[3] -= 1;
+	while (ft_isdigit(str[(int)++d[3]]))
+		d[0] = d[0] * 10 + str[(int)d[3]] - '0';
+	if (str[(int)d[3]] == '.')
+		d[3] += 1;
+	while (ft_isdigit(str[(int)d[3]]))
 	{
-		result = result * 10 + str[i] - '0';
-		i++;
+		d[0] = d[0] * 10 + str[(int)d[3]] - '0';
+		d[2]++;
+		d[3] += 1;
 	}
-	if (str[i] == '.')
-		i++;
-	while (ft_isdigit(str[i]))
-	{
-		result = result * 10 + str[i] - '0';
-		decimal++;
-		i++;
-	}
-	while (decimal--)
-		result /= 10;
-	return (result * sign);
+	while (d[2]--)
+		d[0] /= 10;
+	return (d[0] * d[1]);
 }
 
 void	free_split(char **split)

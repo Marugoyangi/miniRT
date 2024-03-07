@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:24:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 10:48:33 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:32:26 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -320,50 +320,59 @@ t_pdf			pdf_mix_light(t_object *object, t_hit_record *rec, \
 void			minirt_init(t_minirt *minirt, int width, double aspect_ratio);
 
 //tests
-void	minirt_random_spheres(t_minirt *minirt);
-void	two_spheres(t_minirt *minirt);
-void	earth(t_minirt *minirt);
-void	two_perlin_spheres(t_minirt *minirt);
-void	quads(t_minirt *minirt);
-void	simple_light(t_minirt *minirt);
-void	cornell_box(t_minirt *minirt);
-void	cornell_box_volume(t_minirt *minirt);
-void	final_scene(t_minirt *minirt);
-void	bump_test(t_minirt *minirt);
-void	cylinder_test(t_minirt *minirt);
+void			minirt_random_spheres(t_minirt *minirt);
+void			two_spheres(t_minirt *minirt);
+void			earth(t_minirt *minirt);
+void			two_perlin_spheres(t_minirt *minirt);
+void			quads(t_minirt *minirt);
+void			simple_light(t_minirt *minirt);
+void			cornell_box(t_minirt *minirt);
+void			cornell_box_volume(t_minirt *minirt);
+void			final_scene(t_minirt *minirt);
+void			bump_test(t_minirt *minirt);
+void			cylinder_test(t_minirt *minirt);
 
 //init
-void		set_material(t_material *mat, int type, t_vec color);
-void		set_texture(t_minirt *minirt, t_material *material, int type, \
-				t_vec color[2]);
-void		parse_read_node(t_minirt *minirt, t_p_node *node, int width, \
+void			set_material(t_material *mat, int type, t_vec color);
+void			set_texture(t_minirt *minirt, t_material *material, int type);
+void			parse_read_node(t_minirt *minirt, t_p_node *node, int width, \
 				double aspect_ratio);
-t_p_node	*parse_create_node(char *path);
-void		set_light(t_minirt *minirt, t_p_node *node);
-void		set_cam(t_minirt *minirt, t_p_node *node);
-void		set_ambient(t_minirt *minirt, t_p_node *node);
-void		set_sphere(t_minirt *minirt, t_p_node *node);
-void		set_plane(t_minirt *minirt, t_p_node *node);
-void		set_box(t_minirt *minirt, t_p_node *node);
-void		set_cylinder(t_minirt *minirt, t_p_node *node);
-void		set_hyperboloid(t_minirt *minirt, t_p_node *node);
-double		ft_atof(char *str);
-void		free_split(char **split);
-void		get_id(t_p_node *node, char **split);
-void		get_ambient(t_p_node *node, char **split);
-void		get_camera(t_p_node *node, char **split);
-void		get_light(t_p_node *node, char **split);
-void		get_sphere(t_p_node *node, char **split);
-void		get_plane(t_p_node *node, char **split);
-void		get_cylinder(t_p_node *node, char **split);
-void		get_hyperboloid(t_p_node *node, char **split);
-void		get_box(t_p_node *node, char **split);
-void		get_material(t_p_node *node, char **split);
-void		get_texture(t_p_node *node, char **split);
-void		get_transform(t_p_node *node, char **split);
-void		transform_by_normal(t_object *obj, t_vec normal, t_vec trans, \
-					t_vec scale);
-int			split_size(char **split);
-void	get_sphere_uv(t_hit_record *rec, t_vec p);
+t_p_node		*parse_create_node(char *path);
+void			set_light(t_minirt *minirt, t_p_node *node);
+void			set_cam(t_minirt *minirt, t_p_node *node);
+void			set_ambient(t_minirt *minirt, t_p_node *node);
+void			set_sphere(t_minirt *minirt, t_p_node *node);
+void			set_plane(t_minirt *minirt, t_p_node *node);
+void			set_box(t_minirt *minirt, t_p_node *node);
+void			set_cylinder(t_minirt *minirt, t_p_node *node);
+void			set_hyperboloid(t_minirt *minirt, t_p_node *node);
+double			ft_atof(char *str);
+void			free_split(char **split);
+void			get_id(t_p_node *node, char **split, int (*tmp)[5]);
+void			get_ambient(t_p_node *node, char **split, int (*tmp)[5]);
+void			get_camera(t_p_node *node, char **split, int (*tmp)[5]);
+void			get_light(t_p_node *node, char **split, int (*tmp)[5]);
+void			get_sphere(t_p_node *node, char **split);
+void			get_plane(t_p_node *node, char **split);
+void			get_cylinder(t_p_node *node, char **split);
+void			get_hyperboloid(t_p_node *node, char **split);
+void			get_box(t_p_node *node, char **split);
+void			get_material(t_p_node *node, char **split);
+void			get_texture(t_p_node *node, char **split);
+void			get_transform(t_p_node *node, char **split);
+void			transform_by_normal(t_object *obj, t_vec normal, t_vec trans, \
+						t_vec scale);
+int				split_size(char **split);
+void			get_sphere_uv(t_hit_record *rec, t_vec p);
+void			parse_node_iter(char *line, t_p_node *nodes[2], \
+					int (*tmp)[5], char **split);
+void			p_node_add_back(t_p_node **node, t_p_node *new);
+void			free_p_node(t_p_node *node);
+void			get_cylinder_util(t_p_node *node, char **split, char **coord);
+void			get_plane_util(t_p_node *node, char **split, char **coord);
+void			get_box_util(t_p_node *node, char **split, char **coord);
+void			get_sphere_util(t_p_node *node, char **split, char **coord);
+void			get_hyperboloid_util(t_p_node *node, char **split, \
+				char **coord);
 
 #endif

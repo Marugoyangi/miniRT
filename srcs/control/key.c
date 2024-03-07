@@ -6,11 +6,19 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 11:18:00 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/06 10:41:23 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:23:30 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+void	re_render(t_minirt *minirt)
+{
+	set_camera_basis(minirt);
+	multi_thread(minirt);
+	mlx_put_image_to_window(minirt->mlx, minirt->win, \
+	minirt->img->img_ptr, 0, 0);
+}
 
 void	move_camera(int key, t_minirt *minirt)
 {
@@ -34,46 +42,36 @@ void	move_camera(int key, t_minirt *minirt)
 		minirt->camera.origin = vec_add(minirt->camera.origin, \
 		minirt->camera.basis.u);
 	}
-	set_camera_basis(minirt);
-	multi_thread(minirt);
-	mlx_put_image_to_window(minirt->mlx, minirt->win, \
-	minirt->img->img_ptr, 0, 0);
+	re_render(minirt);
 }
 
 void	zoom_camera(int key, t_minirt *minirt)
 {
+	t_vec	*orglook[2];
+
+	orglook[0] = &minirt->camera.origin;
+	orglook[1] = &minirt->camera.look_at;
 	if (key == KW)
 	{
-		minirt->camera.origin = vec_add(minirt->camera.origin, \
-		minirt->camera.basis.v);
-		minirt->camera.look_at = vec_add(minirt->camera.look_at, \
-		minirt->camera.basis.v);
+		*orglook[0] = vec_add(*orglook[0], minirt->camera.basis.v);
+		*orglook[1] = vec_add(*orglook[1], minirt->camera.basis.v);
 	}
 	else if (key == KS)
 	{
-		minirt->camera.origin = vec_sub(minirt->camera.origin, \
-		minirt->camera.basis.v);
-		minirt->camera.look_at = vec_sub(minirt->camera.look_at, \
-		minirt->camera.basis.v);
+		*orglook[0] = vec_sub(*orglook[0], minirt->camera.basis.v);
+		*orglook[1] = vec_sub(*orglook[1], minirt->camera.basis.v);
 	}
 	else if (key == KA)
 	{
-		minirt->camera.origin = vec_sub(minirt->camera.origin, \
-		minirt->camera.basis.u);
-		minirt->camera.look_at = vec_sub(minirt->camera.look_at, \
-		minirt->camera.basis.u);
+		*orglook[0] = vec_sub(*orglook[0], minirt->camera.basis.u);
+		*orglook[1] = vec_sub(*orglook[1], minirt->camera.basis.u);
 	}
 	else if (key == KD)
 	{
-		minirt->camera.origin = vec_add(minirt->camera.origin, \
-		minirt->camera.basis.u);
-		minirt->camera.look_at = vec_add(minirt->camera.look_at, \
-		minirt->camera.basis.u);
+		*orglook[0] = vec_add(*orglook[0], minirt->camera.basis.u);
+		*orglook[1] = vec_add(*orglook[1], minirt->camera.basis.u);
 	}
-	set_camera_basis(minirt);
-	multi_thread(minirt);
-	mlx_put_image_to_window(minirt->mlx, minirt->win, \
-	minirt->img->img_ptr, 0, 0);
+	re_render(minirt);
 }
 
 void	move_up_down(int key, t_minirt *minirt)
@@ -92,10 +90,7 @@ void	move_up_down(int key, t_minirt *minirt)
 		minirt->camera.look_at = vec_sub(minirt->camera.look_at, \
 		minirt->camera.basis.w);
 	}
-	set_camera_basis(minirt);
-	multi_thread(minirt);
-	mlx_put_image_to_window(minirt->mlx, minirt->win, \
-	minirt->img->img_ptr, 0, 0);
+	re_render(minirt);
 }
 
 int	key_input(int key, t_minirt *minirt)

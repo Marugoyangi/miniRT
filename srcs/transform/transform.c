@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 15:21:37 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 13:37:36 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:11:33 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_matrix	matrix_rotate_x(double angle)
 
 void	set_center_aabb(t_aabb *bbox, t_object *obj)
 {
-	t_interval xyz[3];
+	t_interval	xyz[3];
 
 	xyz[0] = obj->bbox.x;
 	xyz[1] = obj->bbox.y;

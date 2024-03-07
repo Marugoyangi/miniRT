@@ -6,7 +6,7 @@
 #    By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/26 19:04:30 by jeongbpa          #+#    #+#              #
-#    Updated: 2024/03/06 08:25:08 by jeongbpa         ###   ########.fr        #
+#    Updated: 2024/03/07 16:27:34 by jeongbpa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,8 @@ SRCS =	$(addprefix $(SRC_DIR), main.c\
 								texture/checker.c texture/image.c texture/perlin.c texture/perlin_utils.c\
 								control/key.c\
 								parse/parse.c parse/init_env.c parse/init_material.c parse/init_obj.c\
-								parse/parse_obj.c parse/parse_material.c parse/parse_env.c\
+								parse/parse_obj.c parse/parse_material.c parse/parse_env.c parse/parse_iter.c\
+								parse/parse_obj_utils.c\
 								test.c)
 
 OBJS = $(SRCS:.c=.o)
@@ -45,7 +46,7 @@ BONUS_OBJS = $(BONUS_SRCS:.c=.o)
 
 HEADER = minirt.h
 HEADER_BONUS = minirt_bonus.h
-CFLAGS = -I./mlx_linux -I./includes/ -I./libft -O3 -g3 #-Wall -Wextra -Werror
+CFLAGS = -I./mlx_linux -I./includes/ -I./libft -O3 -g3 -Wall -Wextra -Werror
 
 CC = cc
 NAME = minirt

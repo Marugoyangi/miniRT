@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 22:10:43 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 13:37:27 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:23:56 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,15 @@ void	transform_by_normal(t_object *obj, t_vec normal, t_vec trans, \
 	double	d[3];
 
 	d[0] = atan2(normal.y, normal.z) * 180 / M_PI;
-	d[1] = atan2(-normal.x, sqrt(normal.y * normal.y + normal.z * normal.z)) * 180 / M_PI;
+	d[1] = atan2(-normal.x, sqrt(normal.y * normal.y + \
+	normal.z * normal.z)) * 180 / M_PI;
 	d[2] = atan2(normal.x, normal.y) * 180 / M_PI;
 	transform(obj, vec(d[0], d[1], d[2]), trans, scale);
 }
 
-void	check_transform(t_p_node *node)
+void	check_transform(t_p_node *node, char **coord)
 {
+	free_split(coord);
 	if (node->transform[0].x < -180 || node->transform[0].x > 180 || \
 		node->transform[0].y < -180 || node->transform[0].y > 180 || \
 		node->transform[0].z < -180 || node->transform[0].z > 180)
@@ -32,8 +34,8 @@ void	check_transform(t_p_node *node)
 	if (node->transform[2].x == 0 || node->transform[2].y == 0 || \
 		node->transform[2].z == 0)
 		ft_error("Error\n");
-	if (node->transform[0].x || node->transform[0].y || node->transform[0].z ||
-		node->transform[1].x || node->transform[1].y || node->transform[1].z ||
+	if (node->transform[0].x || node->transform[0].y || node->transform[0].z || \
+		node->transform[1].x || node->transform[1].y || node->transform[1].z || \
 		(node->transform[2].x != 1 || node->transform[2].y != 1 || \
 		node->transform[2].z != 1))
 	{
@@ -67,8 +69,7 @@ void	get_transform(t_p_node *node, char **split)
 	node->transform[2].x = ft_atof(coord[0]);
 	node->transform[2].y = ft_atof(coord[1]);
 	node->transform[2].z = ft_atof(coord[2]);
-	free_split(coord);
-	check_transform(node);
+	check_transform(node, coord);
 }
 
 void	get_texture(t_p_node *node, char **split)

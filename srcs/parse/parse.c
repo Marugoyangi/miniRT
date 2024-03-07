@@ -6,23 +6,11 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 17:33:53 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 09:36:36 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:14:00 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-void	free_p_node(t_p_node *node)
-{
-	t_p_node	*tmp;
-
-	while (node)
-	{
-		tmp = node->next;
-		free(node);
-		node = tmp;
-	}
-}
 
 void	parse_read_node(t_minirt *minirt, t_p_node *node, \
 					int width, double ratio)
@@ -54,14 +42,14 @@ void	parse_read_node(t_minirt *minirt, t_p_node *node, \
 	free_p_node(node);
 }
 
-void	get_id(t_p_node *node, char **split)
+void	get_id(t_p_node *node, char **split, int (*tmp)[5])
 {
 	if (!ft_strcmp(split[0], "A"))
-		get_ambient(node, split);
+		get_ambient(node, split, tmp);
 	else if (!ft_strcmp(split[0], "C"))
-		get_camera(node, split);
+		get_camera(node, split, tmp);
 	else if (!ft_strcmp(split[0], "L"))
-		get_light(node, split);
+		get_light(node, split, tmp);
 	else if (!ft_strcmp(split[0], "sp"))
 		get_sphere(node, split);
 	else if (!ft_strcmp(split[0], "pl"))
@@ -112,40 +100,23 @@ int	namecheck(char *path, char *ext)
 
 t_p_node	*parse_create_node(char *path)
 {
-	int			tmp[2];
+	int			tmp[5];
 	char		*line;
 	t_p_node	*nodes[2];
 	char		**split;
 
 	nodes[0] = NULL;
+	split = NULL;
+	ft_memset(tmp, 0, sizeof(int) * 5);
 	if (!namecheck(path, ".rt"))
 		ft_error("Error\n");
 	tmp[0] = open(path, 0, O_RDONLY);
 	if (tmp[0] < 0)
-		ft_error("Failed to open file");
+		ft_error("Error\n");
 	line = get_next_line(tmp[0]);
 	if (!line)
 		ft_error("Error\n");
-	while (line)
-	{
-		split = ft_split(line, ' ');
-		if (split[0] == NULL)
-		{
-			free_split(split);
-			free(line);
-			line = get_next_line(tmp[0]);
-			continue ;
-		}
-		nodes[1] = ft_malloc(sizeof(t_p_node));
-		if (!nodes[0])
-			nodes[0] = nodes[1];
-		get_id(nodes[1], split);
-		free_split(split);
-		if (nodes[0] != nodes[1])
-			p_node_add_back(&nodes[0], nodes[1]);
-		free(line);
-		line = get_next_line(tmp[0]);
-	}
+	parse_node_iter(line, nodes, &tmp, split);
 	close(tmp[0]);
 	return (nodes[0]);
 }

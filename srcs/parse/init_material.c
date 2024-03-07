@@ -6,15 +6,19 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:28:24 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 11:53:30 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:05:13 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 void	set_texture(t_minirt *minirt, t_material *mat, \
-					int type, t_vec color[2])
+					int type)
 {
+	t_vec	color[2];
+
+	color[0] = random_vec(0, 1);
+	color[1] = random_vec(0, 1);
 	mat->texture.type = type;
 	if (type == CHECKER)
 	{

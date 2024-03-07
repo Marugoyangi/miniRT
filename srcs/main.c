@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:25:06 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 14:21:51 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:36:23 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,6 @@ int	main(int argc, char **argv)
 		mlx_hook(minirt.win, 17, 0, ft_close, &minirt);
 		mlx_loop(minirt.mlx);
 	}
+	else
+		ft_error("Error\n");
 }
-
