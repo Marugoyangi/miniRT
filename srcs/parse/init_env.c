@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 17:46:12 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 16:58:19 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:25:27 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,13 @@ void	set_cam(t_minirt *minirt, t_p_node *node)
 	t_vec	vecs[3];
 
 	vecs[0] = node->coord;
-	vecs[1] = vec_sub(node->coord, node->normal);
+	vecs[1] = vec_add(node->normal, node->coord);
 	if (node->normal.x == 0 && node->normal.y == 0 && node->normal.z == 0)
 		ft_error("Error\n");
 	vecs[2] = vec(0, 1, 0);
+	printf("vecs[1] %f", vecs[1].x);
+	printf("vecs[1] %f", vecs[1].y);
+	printf("vecs[1] %f", vecs[1].z);
 	set_camera(minirt, node->etc[0], vecs, 0.0);
 	minirt->camera.background = color(0.01, 0.01, 0.01);
 }
