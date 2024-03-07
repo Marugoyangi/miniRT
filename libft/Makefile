@@ -6,7 +6,7 @@
 #    By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/20 15:37:02 by jeongbpa          #+#    #+#              #
-#    Updated: 2024/02/28 23:22:55 by jeongbpa         ###   ########.fr        #
+#    Updated: 2024/03/07 17:55:51 by jeongbpa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,12 +22,6 @@ SRCS			= ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c \
 
 OBJS			= $(SRCS:.c=.o)
 
-BONUS 			= ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c ft_lstlast_bonus.c \
-				ft_lstadd_back_bonus.c ft_lstdelone_bonus.c ft_lstclear_bonus.c ft_lstiter_bonus.c \
-				ft_lstmap_bonus.c
-
-BONUS_OBJS		= $(BONUS:.c=.o)
-
 CC				=	cc
 
 RM				=	rm -f
@@ -37,7 +31,7 @@ CFLAGS			=	-Wall -Wextra -Werror -I.
 NAME			=	libft.a
 
 ifdef BONUS_FLAG
-OBJ_FLAG = $(OBJS) $(BONUS_OBJS)
+OBJ_FLAG = $(OBJS)
 else
 OBJ_FLAG = $(OBJS)
 endif

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minirt.h                                           :+:      :+:    :+:   */
+/*   minirt_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:24:30 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 18:00:38 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:50:06 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#ifndef MINIRT_BONUS_H
+# define MINIRT_BONUS_H
 
 //allowed functions
 # include <stdio.h>
@@ -32,6 +32,10 @@
 # include "ray.h"
 # include "camera.h"
 # include "get_next_line.h"
+
+//bonus
+# include <pthread.h>
+# define THREAD_MAX	8
 
 typedef struct s_minirt	t_minirt;
 typedef struct s_thread
@@ -63,6 +67,8 @@ typedef struct s_minirt
 	t_object		*object;
 	t_bvh			*bvh;
 	t_aabb			box;
+	pthread_t		thread[THREAD_MAX];
+	t_thread		thread_data[THREAD_MAX];
 	t_object		*light;
 	t_vec			ambient;
 }				t_minirt;
@@ -147,7 +153,7 @@ int				is_near_zero(t_vec vec);
 
 //color
 unsigned int	set_color(t_color color, int samples_per_pixel);
-void			print_color(t_minirt *minirt);
+void			print_color(void *thread);
 void			multi_thread(t_minirt *minirt);
 t_color			color(double r, double g, double b);
 

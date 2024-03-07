@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   key.c                                              :+:      :+:    :+:   */
+/*   key_bonus.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 11:18:00 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 18:01:53 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:50:40 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "minirt_bonus.h"
 
 void	re_render(t_minirt *minirt)
 {
 	set_camera_basis(minirt);
-	print_color(minirt);
+	multi_thread(minirt);
 	mlx_put_image_to_window(minirt->mlx, minirt->win, \
 	minirt->img->img_ptr, 0, 0);
 }
@@ -102,7 +102,7 @@ int	key_input(int key, t_minirt *minirt)
 	else if (minirt->camera.k == 10 && key == SPACE)
 	{
 		minirt->camera.k = 1;
-		print_color(minirt);
+		multi_thread(minirt);
 		mlx_put_image_to_window(minirt->mlx, minirt->win, \
 		minirt->img->img_ptr, 0, 0);
 	}

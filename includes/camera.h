@@ -6,14 +6,12 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 03:40:48 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/27 01:13:13 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:53:05 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CAMERA_H
 # define CAMERA_H
-
-# include "minirt.h"
 
 typedef struct s_basis
 {

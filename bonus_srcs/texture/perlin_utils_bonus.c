@@ -1,38 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
+/*   perlin_utils_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/28 17:23:47 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 17:52:53 by jeongbpa         ###   ########.fr       */
+/*   Created: 2024/02/26 20:33:42 by jeongbpa          #+#    #+#             */
+/*   Updated: 2024/03/07 17:50:40 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSE_H
-# define PARSE_H
+#include "minirt_bonus.h"
 
-typedef struct s_p_node
+double	noise_turb(t_perlin *perlin, t_point p)
 {
-	int				id;
-	t_vec			coord;
-	t_vec			normal;
-	int				color[3];
-	double			geometric[2];
-	int				etc[2];
-	int				is_transformed;
-	t_vec			transform[3];
-	struct s_p_node	*next;
-}	t_p_node;
+	double	accum;
+	t_vec	tmp;
+	double	weight;
+	int		i;
 
-# define A 1
-# define C 2
-# define L 3
-# define SP 4
-# define PL 5
-# define CY 6
-# define HY 7
-# define BO 8
-
-#endif
+	i = 0;
+	tmp = p;
+	accum = 0.0;
+	weight = 1.0;
+	while (i < 7)
+	{
+		accum += weight * noise(perlin, tmp);
+		weight *= 0.5;
+		tmp = vec_mul_const(tmp, 2);
+		i++;
+	}
+	return (fabs(accum));
+}

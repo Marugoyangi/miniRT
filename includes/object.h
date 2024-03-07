@@ -6,14 +6,12 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 22:13:43 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 12:53:41 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:52:56 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef OBJECT_H
 # define OBJECT_H
-
-# include "minirt.h"
 
 typedef struct s_aabb	t_aabb;
 typedef struct s_vec	t_point;

@@ -1,38 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
+/*   checker_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/28 17:23:47 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 17:52:53 by jeongbpa         ###   ########.fr       */
+/*   Created: 2024/01/23 19:48:37 by jeongbpa          #+#    #+#             */
+/*   Updated: 2024/03/07 17:50:40 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSE_H
-# define PARSE_H
+#include "minirt_bonus.h"
 
-typedef struct s_p_node
+t_color	checker(t_checker *checker, t_hit_record *rec)
 {
-	int				id;
-	t_vec			coord;
-	t_vec			normal;
-	int				color[3];
-	double			geometric[2];
-	int				etc[2];
-	int				is_transformed;
-	t_vec			transform[3];
-	struct s_p_node	*next;
-}	t_p_node;
+	int	ret[3];
 
-# define A 1
-# define C 2
-# define L 3
-# define SP 4
-# define PL 5
-# define CY 6
-# define HY 7
-# define BO 8
-
-#endif
+	ret[0] = (int)floor(rec->u * rec->img_width * checker->scale);
+	ret[1] = (int)floor(rec->v * rec->img_height * checker->scale);
+	if ((ret[0] + ret[1]) % 2 == 0)
+		return (checker->color1);
+	else
+		return (checker->color2);
+}

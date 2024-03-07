@@ -1,38 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
+/*   camera_utils_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/28 17:23:47 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 17:52:53 by jeongbpa         ###   ########.fr       */
+/*   Created: 2024/01/17 07:18:54 by jeongbpa          #+#    #+#             */
+/*   Updated: 2024/03/07 17:50:40 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSE_H
-# define PARSE_H
+#include "minirt_bonus.h"
 
-typedef struct s_p_node
+t_vec	random_in_unit_disk(void)
 {
-	int				id;
-	t_vec			coord;
-	t_vec			normal;
-	int				color[3];
-	double			geometric[2];
-	int				etc[2];
-	int				is_transformed;
-	t_vec			transform[3];
-	struct s_p_node	*next;
-}	t_p_node;
+	t_vec	p;
 
-# define A 1
-# define C 2
-# define L 3
-# define SP 4
-# define PL 5
-# define CY 6
-# define HY 7
-# define BO 8
-
-#endif
+	while (1)
+	{
+		p = vec(random_double(-1, 1), random_double(-1, 1), 0);
+		if (vec_length_squared(p) < 1.0)
+			return (p);
+	}
+}

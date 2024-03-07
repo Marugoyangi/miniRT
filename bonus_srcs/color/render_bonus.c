@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render.c                                           :+:      :+:    :+:   */
+/*   render_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:33:52 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 18:02:36 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:50:40 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "minirt_bonus.h"
 
 void	set_pixel(t_minirt *minirt, int x, int y, unsigned int color)
 {
@@ -68,28 +68,52 @@ void	anti_aliasing(t_minirt *minirt, int x, int y, t_color *pixel_color)
 	}
 }
 
-void	print_color(t_minirt *minirt)
+void	multi_thread(t_minirt *minirt)
+{
+	int			i;
+
+	i = 0;
+	while (i < THREAD_MAX)
+	{
+		minirt->thread_data[i].id = i;
+		minirt->thread_data[i].minirt = minirt;
+		pthread_create(minirt->thread + i, NULL, (void *)print_color, \
+		&minirt->thread_data[i]);
+		i++;
+	}
+	i = 0;
+	while (i < THREAD_MAX)
+	{
+		pthread_join(*(minirt->thread + i), NULL);
+		i++;
+	}
+}
+
+void	print_color(void *thread)
 {
 	int				xyi[3];
 	t_color			pixel_color;
+	t_thread		*t;
 
-	xyi[1] = 0;
-	while (xyi[1] < minirt->img_height)
+	t = (t_thread *)thread;
+	xyi[1] = t->minirt->img_height / THREAD_MAX * t->id;
+	while (xyi[1] < t->minirt->img_height / THREAD_MAX * (t->id + 1))
 	{
 		xyi[0] = 0;
-		while (xyi[0] < minirt->img_width)
+		while (xyi[0] < t->minirt->img_width)
 		{
 			pixel_color = color(0, 0, 0);
-			anti_aliasing(minirt, xyi[0], xyi[1], &pixel_color);
+			anti_aliasing(t->minirt, xyi[0], xyi[1], &pixel_color);
 			xyi[2] = -1;
-			while (++xyi[2] < minirt->camera.k && xyi[0] + xyi[2] \
-			< minirt->img_width)
+			while (++xyi[2] < t->minirt->camera.k && xyi[0] + xyi[2] \
+			< t->minirt->img_width)
 			{
-				set_pixel(minirt, xyi[0] + xyi[2], xyi[1], \
-				set_color(pixel_color, minirt->camera.samples_per_pixel));
+				set_pixel(t->minirt, xyi[0] + xyi[2], xyi[1], \
+				set_color(pixel_color, t->minirt->camera.samples_per_pixel));
 			}
-			xyi[0] += minirt->camera.k;
+			xyi[0] += t->minirt->camera.k;
 		}
 		xyi[1] += 1;
 	}
+	pthread_exit(0);
 }

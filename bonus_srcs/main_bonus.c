@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:25:06 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 18:01:17 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:43:54 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "minirt_bonus.h"
 
 void	minirt_init(t_minirt *minirt, int width, double aspect_ratio)
 {
@@ -51,7 +51,7 @@ int	main(int argc, char **argv)
 		tmp = object_vector_init(minirt.object, 0, ft_lstsize(minirt.object));
 		minirt.bvh = bvh_node(tmp, 0, ft_lstsize(minirt.object));
 		free(tmp);
-		print_color(&minirt);
+		multi_thread(&minirt);
 		mlx_put_image_to_window(minirt.mlx, minirt.win, \
 								minirt.img->img_ptr, 0, 0);
 		mlx_hook(minirt.win, 2, 0, key_input, &minirt);

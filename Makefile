@@ -6,7 +6,7 @@
 #    By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/26 19:04:30 by jeongbpa          #+#    #+#              #
-#    Updated: 2024/03/07 16:27:34 by jeongbpa         ###   ########.fr        #
+#    Updated: 2024/03/07 18:21:38 by jeongbpa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,16 +32,30 @@ SRCS =	$(addprefix $(SRC_DIR), main.c\
 								control/key.c\
 								parse/parse.c parse/init_env.c parse/init_material.c parse/init_obj.c\
 								parse/parse_obj.c parse/parse_material.c parse/parse_env.c parse/parse_iter.c\
-								parse/parse_obj_utils.c\
-								test.c)
+								parse/parse_obj_utils.c)
 
 OBJS = $(SRCS:.c=.o)
 
-BONUS_SRCS = 
-# BONUS_SRCS =	$(addprefix $(SRC_DIR), main.c utils.c\
-# 								vector/vector_ops.c vector/vector_cals.c vector/vector_const.c \
-# 								ray/ray.c \
-# 								color/color.c color/print.c)
+BONUS_SRCS = $(addprefix $(BONUS_DIR), main_bonus.c\
+								utils/utils_bonus.c utils/random_bonus.c utils/rng_bonus.c utils/free_bonus.c\
+								utils/get_next_line_bonus.c utils/get_next_line_utils_bonus.c\
+								utils/parse_utils_bonus.c\
+								vector/vector_ops_bonus.c vector/vector_cals_bonus.c vector/vector_const_bonus.c vector/vector_utils_bonus.c\
+								transform/transform_bonus.c transform/transform_aabb_bonus.c transform/matrix_bonus.c\
+								transform/hit_transformed_bonus.c transform/matrix_inverse_bonus.c\
+								ray/ray_bonus.c ray/scatter_bonus.c ray/volume_bonus.c ray/material_bonus.c ray/pdf_bonus.c ray/pdf_object_bonus.c\
+								ray/pdf_mixture_bonus.c\
+								camera/camera_bonus.c camera/camera_utils_bonus.c\
+								color/color_bonus.c color/render_bonus.c color/diffuse_bonus.c\
+								object/object_bonus.c object/sphere_bonus.c object/quad_bonus.c object/box_bonus.c object/cylinder_bonus.c\
+								object/hyperboloid_bonus.c\
+								bvh/bvh_bonus.c bvh/bvh_utils_bonus.c bvh/bvh_compare_bonus.c \
+								bvh/interval_bonus.c bvh/aabb_bonus.c bvh/aabb_utils_bonus.c \
+								texture/checker_bonus.c texture/image_bonus.c texture/perlin_bonus.c texture/perlin_utils_bonus.c\
+								control/key_bonus.c\
+								parse/parse_bonus.c parse/init_env_bonus.c parse/init_material_bonus.c parse/init_obj_bonus.c\
+								parse/parse_obj_bonus.c parse/parse_material_bonus.c parse/parse_env_bonus.c parse/parse_iter_bonus.c\
+								parse/parse_obj_utils_bonus.c)
 BONUS_OBJS = $(BONUS_SRCS:.c=.o)
 
 HEADER = minirt.h
