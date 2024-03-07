@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 03:45:00 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 08:39:29 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:09:44 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,11 @@ void	set_camera_basis(t_minirt *minirt)
 	minirt->camera.look_at));
 	basis->u = vec_unit(vec_cross(minirt->camera.vertical_up, \
 	basis->w));
+	if (vec_length(basis->u) == 0)
+		basis->u = vec(0, 0, -1);
 	basis->v = vec_cross(basis->w, basis->u);
+	if (vec_length(basis->v) == 0)
+		basis->v = vec(0, 1, 0);
 	basis->viewport_u = vec_mul_const(basis->u, minirt->camera.viewport_width);
 	basis->viewport_v = vec_mul_const(basis->v, minirt->camera.viewport_height);
 	basis->lower_left_corner = vec_sub(minirt->camera.origin, \
@@ -67,7 +71,7 @@ void	set_camera(t_minirt *minirt, int fov, t_vec vec[3], double dof)
 
 	camera = &minirt->camera;
 	minirt->camera.max_depth = 50;
-	minirt->camera.focus_distance = 10.0;
+	minirt->camera.focus_distance = 10;
 	minirt->camera.samples_per_pixel = 20;
 	camera->k = 1;
 	minirt->camera.fov = fov;

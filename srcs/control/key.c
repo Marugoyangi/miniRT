@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 11:18:00 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/03/07 15:23:30 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:52:34 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 void	re_render(t_minirt *minirt)
 {
+	printf("minirt->camera.origin: %f, %f, %f\n", minirt->camera.origin.x, minirt->camera.origin.y, minirt->camera.origin.z);
+	printf("minirt->camera.look_at: %f, %f, %f\n", minirt->camera.look_at.x, minirt->camera.look_at.y, minirt->camera.look_at.z);
+	printf("minirt->camera.basis.w: %f, %f, %f\n", minirt->camera.basis.w.x, minirt->camera.basis.w.y, minirt->camera.basis.w.z);
+	printf("minirt->camera.basis.u: %f, %f, %f\n", minirt->camera.basis.u.x, minirt->camera.basis.u.y, minirt->camera.basis.u.z);
+	printf("minirt->camera.basis.v: %f, %f, %f\n", minirt->camera.basis.v.x, minirt->camera.basis.v.y, minirt->camera.basis.v.z);
 	set_camera_basis(minirt);
 	multi_thread(minirt);
 	mlx_put_image_to_window(minirt->mlx, minirt->win, \

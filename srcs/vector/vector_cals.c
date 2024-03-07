@@ -6,7 +6,7 @@
 /*   By: jeongbpa <jeongbpa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:42:54 by jeongbpa          #+#    #+#             */
-/*   Updated: 2024/01/17 08:28:34 by jeongbpa         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:02:33 by jeongbpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ t_vec	vec_unit(t_vec vec)
 {
 	t_vec	unit_vec;
 
+	if (vec_length(vec) == 0)
+		return (vec);
 	unit_vec = vec_div_const(vec, vec_length(vec));
 	return (unit_vec);
 }
